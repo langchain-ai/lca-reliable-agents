@@ -325,7 +325,7 @@ async def chat(question: str) -> str:
         "content": final_content
     })
 
-    return final_content
+    return {"messages": messages, "output": final_content}
 
 async def main():
     print("Office Supplies Support Chat")
@@ -348,7 +348,8 @@ async def main():
         if not user_input:
             continue
 
-        response = await chat(user_input)
+        result = await chat(user_input)
+        response = result["output"]
         print(f"\nAgent: {response}\n")
 
 if __name__ == "__main__":
