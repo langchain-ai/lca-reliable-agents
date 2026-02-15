@@ -25,12 +25,10 @@ Course materials for LangSmith Professional, with Python and TypeScript implemen
 │   ├── chapter-3/                 # Chapter 3: Synthetic data & advanced eval
 │   │   ├── question_generator.py  # Synthetic question generation
 │   │   ├── run_questions.py       # Batch question runner
-│   │   ├── agent_v5_runner.py     # Agent v5 experiment runner
 │   │   ├── enumerate_categories.py
 │   │   ├── eval_database_usage.py # Updated evaluator
 │   │   └── run_experiment.py      # Experiment runner
 │   │
-│   ├── generate_qa_traces.py        # QA trace generation
 │   ├── pyproject.toml
 │   └── .env.example
 │
