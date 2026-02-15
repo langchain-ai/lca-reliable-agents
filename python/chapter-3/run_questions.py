@@ -47,8 +47,10 @@ async def main():
 
     # Import agent and load knowledge base
     print("Loading agent...")
-    from agent_v5_runner import chat, ensure_kb_loaded
-    await ensure_kb_loaded()
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent / "officeflow_agent"))
+    from agent_v5 import chat, load_knowledge_base
+    await load_knowledge_base()
     print()
 
     # Read questions
@@ -76,7 +78,8 @@ async def main():
         print(f"  [{i+1}/{len(rows)}] {display_q}")
 
         try:
-            response = await chat(question)
+            result = await chat(question)
+            response = result["output"]
         except Exception as e:
             print(f"    Error: {e}")
             response = f"[Error: {e}]"

@@ -147,7 +147,7 @@ SEARCH BEST PRACTICES (apply after schema discovery):
     }
 }
 
-async def load_knowledge_base(kb_dir: str = "knowledge_base") -> None:
+async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
     """Load knowledge base documents and generate embeddings for WHOLE documents (no chunking)."""
     global knowledge_base_docs, knowledge_base_embeddings
 
@@ -264,7 +264,7 @@ def get_thread_history(thread_id: str, project_name: str):
 @traceable(name="Emma")
 async def chat(question: str) -> str:
     """Process a user question and return assistant response."""
-    db_path = 'inventory/inventory.db'
+    db_path = '../inventory/inventory.db'
     tools = [QUERY_DATABASE_TOOL, SEARCH_KNOWLEDGE_BASE_TOOL]
 
     # Fetch conversation history from LangSmith traces

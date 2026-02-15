@@ -8,18 +8,14 @@ from typing import List, Tuple
 import numpy as np
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
-from langsmith import traceable, Client
-from langsmith.wrappers import wrap_openai
-import langsmith as ls
 
 load_dotenv()
 
-# Initialize clients
-client = wrap_openai(AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY")))
-langsmith_client = Client()
+# Initialize OpenAI client
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Configuration
-LANGSMITH_PROJECT = os.getenv("LANGSMITH_PROJECT", "lca-ls-project")
+# Global conversation history and thread ID
+conversation_history = []
 thread_id = str(uuid.uuid4())
 
 # Knowledge base storage (loaded on startup)
@@ -94,7 +90,6 @@ You: "For document signing, I'd recommend a pen with archival-quality ink that w
 
 Remember: You represent OfficeFlow's commitment to excellent customer service. Be helpful, honest, and human in every interaction."""
 
-@traceable(name="query_database")
 def query_database(query: str, db_path: str) -> str:
     """Execute SQL query against the inventory database."""
     try:
@@ -107,7 +102,7 @@ def query_database(query: str, db_path: str) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
 
-async def load_knowledge_base(kb_dir: str = "knowledge_base") -> None:
+async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
     """Load knowledge base documents and generate embeddings."""
     global knowledge_base_docs, knowledge_base_embeddings
 
@@ -119,6 +114,9 @@ async def load_knowledge_base(kb_dir: str = "knowledge_base") -> None:
     # Load all .md files from knowledge base directory
     docs = []
     for file_path in kb_path.glob("*.md"):
+        # Skip the CHUNKING_NOTES.md file
+        if file_path.name == "CHUNKING_NOTES.md":
+            continue
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
             docs.append((file_path.name, content))
@@ -142,7 +140,6 @@ async def load_knowledge_base(kb_dir: str = "knowledge_base") -> None:
     knowledge_base_embeddings = embeddings
     print(f"Knowledge base loaded: {len(docs)} documents indexed")
 
-@traceable(name="search_knowledge_base")
 async def search_knowledge_base(query: str, top_k: int = 2) -> str:
     """Search knowledge base using semantic similarity."""
     if not knowledge_base_docs or not knowledge_base_embeddings:
@@ -212,46 +209,15 @@ SEARCH_KNOWLEDGE_BASE_TOOL = {
     }
 }
 
-def get_thread_history(thread_id: str, project_name: str):
-    """Gets conversation history from LangSmith traces."""
-    # Filter runs by the specific thread and project
-    filter_string = f'and(in(metadata_key, ["session_id","conversation_id","thread_id"]), eq(metadata_value, "{thread_id}"))'
-    # Only grab the LLM runs
-    runs = [r for r in langsmith_client.list_runs(project_name=project_name, filter=filter_string, run_type="llm")]
-
-    # If no history exists, return empty list (new conversation)
-    if not runs:
-        return []
-
-    # Sort by start time to get the most recent interaction
-    runs = sorted(runs, key=lambda run: run.start_time, reverse=True)
-
-    # Reconstruct the conversation state from the latest run
-    latest_run = runs[0]
-    messages = latest_run.inputs.get('messages', [])
-
-    # Add the assistant's response from outputs
-    if latest_run.outputs and 'choices' in latest_run.outputs:
-        assistant_message = latest_run.outputs['choices'][0]['message']
-        return messages + [assistant_message]
-
-    return messages
-
-@traceable(name="Emma")
 async def chat(question: str) -> str:
     """Process a user question and return assistant response."""
-    db_path = 'inventory/inventory.db'
+    db_path = '../inventory/inventory.db'
     tools = [QUERY_DATABASE_TOOL, SEARCH_KNOWLEDGE_BASE_TOOL]
 
-    # Fetch conversation history from LangSmith traces
-    run_tree = ls.get_current_run_tree()
-    current_thread_id = run_tree.metadata.get("thread_id", thread_id)
-    history_messages = get_thread_history(current_thread_id, LANGSMITH_PROJECT)
-
-    # Build messages with history
+    # Build messages with conversation history
     messages = [
         {"role": "system", "content": system_prompt}
-    ] + history_messages + [
+    ] + conversation_history + [
         {"role": "user", "content": question}
     ]
 
@@ -325,7 +291,11 @@ async def chat(question: str) -> str:
         "content": final_content
     })
 
-    return {"messages": messages, "output": final_content}
+    # Update conversation history
+    conversation_history.append({"role": "user", "content": question})
+    conversation_history.append({"role": "assistant", "content": final_content})
+
+    return final_content
 
 async def main():
     print("Office Supplies Support Chat")
@@ -348,8 +318,7 @@ async def main():
         if not user_input:
             continue
 
-        result = await chat(user_input)
-        response = result["output"]
+        response = await chat(user_input)
         print(f"\nAgent: {response}\n")
 
 if __name__ == "__main__":

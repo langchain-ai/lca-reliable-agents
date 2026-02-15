@@ -1,0 +1,19 @@
+﻿question,User_type,Information_type,Question_type,tool_used,agent_response,agent_response
+"Hi there, could you tell me how many packs of the manila file folders you currently have in stock? I need to place an order soon.",standard,product,clear,query_database,"Hi there! The Manila File Folders (25-pack) are in stock (currently available). 
+
+If you’re ready to order, you can place it in our web portal or reach our sales team at sales@officeflow.com and they’ll help you finalize. Would you like me to check other pack sizes (e.g., 10-pack or 50-pack) or pull up a quick quote? Is there anything else I can help with?","Hi there! The Manila File Folders (25-pack) are in stock (currently available). 
+
+If you’re ready to order, you can place it in our web portal or reach our sales team at sales@officeflow.com and they’ll help you finalize. Would you like me to check other pack sizes (e.g., 10-pack or 50-pack) or pull up a quick quote? Is there anything else I can help with?"
+What's the price on your dry erase markers? I'm looking to pick up a few packs for our office whiteboard.,standard,product,clear,query_database,"Hi there! I’d be happy to help with dry erase marker pricing.
+
+I’m not seeing matching SKUs in our current catalog search. Could you share the pack size or brand you’re considering (e.g., 4-pack, 6-pack, color set, or a specific brand)? With that, I can pull exact prices and availability.
+
+If you’d prefer, I can also have our sales team provide live pricing and current availability—just email sales@officeflow.com and they’ll help right away.
+
+What size/brand would you like me to check? And is there anything else you need in the meantime?","Hi there! I’d be happy to help with dry erase marker pricing.
+
+I’m not seeing matching SKUs in our current catalog search. Could you share the pack size or brand you’re considering (e.g., 4-pack, 6-pack, color set, or a specific brand)? With that, I can pull exact prices and availability.
+
+If you’d prefer, I can also have our sales team provide live pricing and current availability—just email sales@officeflow.com and they’ll help right away.
+
+What size/brand would you like me to check? And is there anything else you need in the meantime?"
