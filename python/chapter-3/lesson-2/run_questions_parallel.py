@@ -15,6 +15,7 @@ import asyncio
 import csv
 import sys
 import time
+from datetime import date
 from pathlib import Path
 from typing import Dict, List
 
@@ -57,7 +58,8 @@ async def main():
     # Import agent and load knowledge base
     print("Loading agent...")
     from agent_v5 import chat, load_knowledge_base
-    await load_knowledge_base()
+    kb_dir = str(Path(__file__).resolve().parent.parent.parent / "officeflow_agent" / "knowledge_base")
+    await load_knowledge_base(kb_dir)
     print()
 
     # Read questions
@@ -86,6 +88,8 @@ async def main():
     outfile.flush()
 
     # Semaphore to limit concurrency
+    run_tag = f"lca-ch3-l2-{date.today().strftime('%Y_%m_%d')}"
+    print(f"LangSmith tag: {run_tag}\n")
     sem = asyncio.Semaphore(args.concurrency)
     write_lock = asyncio.Lock()
     completed = {"count": 0}
@@ -96,7 +100,7 @@ async def main():
         question = row["question"]
         async with sem:
             try:
-                result = await chat(question)
+                result = await chat(question, langsmith_extra={"tags": [run_tag]})
                 response = result["output"]
             except Exception as e:
                 response = f"[Error: {e}]"

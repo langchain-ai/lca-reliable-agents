@@ -12,6 +12,7 @@ Usage:
 import argparse
 import asyncio
 import csv
+from datetime import date
 from pathlib import Path
 from typing import Dict, List
 
@@ -48,9 +49,11 @@ async def main():
     # Import agent and load knowledge base
     print("Loading agent...")
     import sys
-    sys.path.insert(0, str(Path(__file__).parent.parent / "officeflow_agent"))
+    agent_dir = Path(__file__).resolve().parent.parent.parent / "officeflow_agent"
+    sys.path.insert(0, str(agent_dir))
     from agent_v5 import chat, load_knowledge_base
-    await load_knowledge_base()
+    kb_dir = str(agent_dir / "knowledge_base")
+    await load_knowledge_base(kb_dir)
     print()
 
     # Read questions
@@ -71,6 +74,8 @@ async def main():
     print(f"Output will be written to {output_path}\n")
 
     # Run each question through the agent
+    run_tag = f"lca-ch3-l2-{date.today().strftime('%Y_%m_%d')}"
+    print(f"LangSmith tag: {run_tag}\n")
     results: List[Dict] = []
     for i, row in enumerate(rows):
         question = row["question"]
@@ -78,7 +83,7 @@ async def main():
         print(f"  [{i+1}/{len(rows)}] {display_q}")
 
         try:
-            result = await chat(question)
+            result = await chat(question, langsmith_extra={"tags": [run_tag]})
             response = result["output"]
         except Exception as e:
             print(f"    Error: {e}")
