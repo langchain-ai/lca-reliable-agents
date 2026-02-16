@@ -1,0 +1,339 @@
+question,example_response,expected_tools
+"I've been waiting FOREVER to get a straight answer from anyone at this company. Look, I need to know three things: 1) How much are your manila file folders? 2) Do you even have spiral notebooks in stock right now? And 3) What would you recommend for a small office that goes through a LOT of paper? I'm running out of patience here.","I completely understand your frustration, and I'm sorry you've had difficulty getting answers. Let me address all three of your questions right now!
+
+1. **Manila File Folders** — Our Manila File Folders (25-pack) are priced at **$9.99** per pack. We currently have 8 packs available in stock.
+
+2. **Spiral Notebooks** — Yes, we do have them in stock! Our Spiral Notebooks (3-pack) are available at **$6.79**, and we currently have 31 packs on hand, so plenty to go around.
+
+3. **Recommendation for a paper-heavy office** — For a small office that uses a lot of paper, I'd definitely recommend our **Copy Paper 500 Sheets** at **$8.99** per ream. We have 45 units in stock right now. Since you go through a lot, you might also want to look into bulk pricing — we typically offer discounts on orders of 10 or more units of the same item. For a bulk quote, you can reach our sales team at **sales@officeflow.com** or call **1-800-OFFICE-1 ext. 2**.
+
+I hope that covers everything! Is there anything else I can help you with?",query_database
+"Hi there, we're a mid-size firm and we go through quite a bit of supplies. I wanted to ask about your... terms, I guess? Like the whole arrangement for bigger customers. What's available?","Hello! Thank you for reaching out — it sounds like you might be interested in learning about our **Business Account** benefits, which are designed specifically for companies like yours with higher-volume needs.
+
+Let me share what I found:
+
+With a **Business Account** at OfficeFlow, you'd enjoy:
+
+- **Net 30 or Net 60 payment terms** (based on credit approval)
+- **No minimum order requirements** (normally there's a $50 minimum)
+- **A dedicated account manager** for your company
+- **Custom pricing** tailored to your regular ordering patterns
+- **Consolidated monthly billing** statements
+- **Purchase order processing**
+- **Custom shipping rates** for high-volume customers
+
+To apply, you can either complete the online application at **www.officeflow.com/business** or email **accounts@officeflow.com** for assistance. You'll need your business name, tax ID, and trade references. A soft credit check is required (won't affect your credit score), and approval typically takes just **1-2 business days**.
+
+Would you like more details on any specific aspect of the business account program, or would you like me to point you in the right direction to get started?",search_knowledge_base
+"Good morning, I'm the procurement manager at Westfield Legal Group. We have about 80 employees across three offices and I'm looking to consolidate our office supply purchasing. A few questions: First, what's your current pricing on copy paper and ballpoint pens in bulk? Second, do you carry stapler options and what's the availability look like? And third, we'd likely be ordering $3,000-$5,000 per month — are there volume discount programs or contract pricing arrangements we should be looking into?","Good morning! Thank you for considering OfficeFlow as your consolidated supplier — it's great to hear from Westfield Legal Group, and we'd love to support your offices.
+
+Let me address each of your questions:
+
+**Pricing & Availability:**
+- **Copy Paper (500 Sheets):** Currently priced at **$8.99 per ream**, with **45 units** in stock.
+- **Blue Ballpoint Pens (12-pack):** Priced at **$5.49 per pack**, with **23 packs** available.
+- **Stapler with Staples:** We do carry staplers at **$12.99 each**, and we currently have **12 units** in stock.
+
+For the volume you'd need across three offices with 80 employees, we can certainly discuss larger quantities and restocking timelines to make sure you're never short on essentials.
+
+**Volume Discounts & Contract Pricing:**
+Great news — with monthly spending in the $3,000–$5,000 range, you'd be an excellent candidate for a **Business Account**. Benefits include:
+- **Contract/custom pricing** for items you order regularly
+- **Net 30 or Net 60 payment terms** (with credit approval)
+- A **dedicated account manager** for your company
+- **No minimum order requirements**
+- Consolidated monthly billing
+- Bulk discounts (typically available on 10+ units of the same item)
+
+To get started with a Business Account and custom pricing, I'd recommend reaching out to our Sales Team at **sales@officeflow.com** or calling **1-800-OFFICE-1 ext. 2** — they can put together a tailored quote and walk you through the account setup. You can also apply online at **www.officeflow.com/business**.
+
+Is there anything else I can help you with?","query_database,search_knowledge_base"
+"Hi, I was wondering if you could help me with something regarding my recent order? There was an issue and I'm not sure what the next step would be. Can you sort it out for me?","Hi there! I'd be happy to help point you in the right direction. Could you give me a bit more detail about the issue you're experiencing? Here are a few possibilities:
+
+- **If you need to track your order or check shipment status**, our Fulfillment team can assist you. You can reach them at fulfillment@officeflow.com or call 1-800-OFFICE-1 ext. 5. You can also check your order status anytime at www.officeflow.com/track.
+
+- **If you need to return or exchange an item**, our Returns Department handles that process. You can contact them at returns@officeflow.com or call 1-800-OFFICE-1 ext. 3.
+
+- **If you need to modify or cancel an order**, please reach out to our Sales team at sales@officeflow.com or call 1-800-OFFICE-1 ext. 2.
+
+- **If there's a billing or account issue**, our Accounts team is available at accounts@officeflow.com or 1-800-OFFICE-1 ext. 4.
+
+In the meantime, I'm happy to help with any product questions, availability, or information about our company policies. Just let me know what you need!",no_tools
+"Hey, we're a larger operation — about 200 staff across a few sites. I wanted to check on your policy around... I guess the flexibility you offer when things don't work out with an order? Like what's the deal with that whole process for our kind of account?","Hi there! Thanks for reaching out, and it's great to hear from a larger organization like yours.
+
+I want to make sure I address your question properly — it sounds like you're asking about our **returns policy**, and specifically how it might apply to a business account of your size. Let me pull up those details for you!
+
+Here's what I found:
+
+**General Returns Policy:**
+- Items can be returned within **30 days of delivery**
+- All returns require a **Return Merchandise Authorization (RMA) number** before shipping anything back
+- Unopened products in original packaging and defective items are eligible
+- Defective or damaged items can be returned **at any time**, even after the 30-day window
+- Refunds are processed within **5-7 business days** to the original payment method
+
+**For Business Accounts specifically:**
+Business customers like your organization may have **customized return policies** based on your specific agreement with OfficeFlow. This means you could potentially have more flexible terms tailored to your volume and needs.
+
+Since you mentioned having around 200 staff across multiple sites, you'd likely benefit from setting up a dedicated business account if you haven't already. That would give you a **dedicated account manager** who can work out return terms (and other benefits like custom pricing, Net 30/60 payment terms, and no minimum order requirements) that fit your operation.
+
+To get that set up or to discuss customized terms, I'd recommend reaching out to our Accounts team at **accounts@officeflow.com** or call **1-800-OFFICE-1 ext. 4** (Monday–Friday, 9:00 AM–5:00 PM EST).
+
+Is there anything else I can help clarify?",search_knowledge_base
+"Hi, I'm hoping you can help me. We occasionally need to pick up orders in person rather than having them shipped. Could you tell me how your Will Call pickup service works and which locations offer it?","Hi there! I'd be happy to help you with information about our Will Call pickup service. Let me look that up for you.
+
+[Using search_knowledge_base to find Will Call pickup policy]
+
+Great news — Will Call pickup is available at all four of our distribution centers! Here's how it works:
+
+**How to Use Will Call Pickup:**
+1. Place your order online at www.officeflow.com or by phone
+2. Select ""Will Call Pickup"" at checkout
+3. You'll receive a notification when your order is ready — typically within 2-4 hours after ordering
+4. Bring your order confirmation and a photo ID when you come to pick up
+
+**Available Locations:**
+- **Portland, OR** (Headquarters) — 1234 Commerce Way, Portland, OR 97220
+- **Chicago, IL** — 5678 Industrial Parkway, Schaumburg, IL 60173
+- **Atlanta, GA** — 9012 Distribution Drive, Norcross, GA 30071
+- **Toronto, ON** — 3456 Logistics Boulevard, Mississauga, ON L5T 2K7
+
+**Hours:** Monday–Friday during distribution center hours (7:00 AM – 6:00 PM local time; Toronto is 8:00 AM – 5:00 PM EST). Please note that pickup is not available on weekends.
+
+The best part — it's a completely free service with no pickup fees, and it saves you on shipping costs!
+
+Is there anything else I can help you with?",search_knowledge_base
+"Hello, this is Marcus Chen from Bridgeport Manufacturing. We operate across the US and Canada with about 300 employees. I have a few questions I'm hoping you can address: First, what are your shipping options and costs for orders going to both US and Canadian locations? Second, what's your return window — we sometimes get items that don't meet spec and need to send them back. And third, is there a minimum order requirement, or does that get waived for business accounts? We're looking at setting up a regular purchasing arrangement.","Hello Marcus! Thank you for reaching out, and welcome to OfficeFlow. It's great to hear from Bridgeport Manufacturing — with 300 employees across the US and Canada, it sounds like you'd be a fantastic fit for our services. Let me address each of your questions:
+
+**Shipping Options & Costs:**
+We offer several shipping tiers:
+- **Standard Shipping** (3-5 business days): $8.95 flat rate, or **free on orders $100+**
+- **Expedited Shipping** (2-3 business days): $15.95, free on orders $250+
+- **Express Shipping** (1-2 business days): $24.95 (Mon-Thu only, signature required)
+- **Overnight Shipping** (next business day): $39.95 (Mon-Thu only, order by 12:00 PM EST)
+
+For your **Canadian locations**, we ship to all provinces and territories. Please note that duties and taxes may apply at the border, and you should expect an additional 1-2 days for customs clearance. Business account customers like yourselves may also qualify for custom shipping rates and dedicated delivery routes in major metro areas.
+
+**Return Policy:**
+Items can be returned within **30 days of delivery**. All returns require a Return Merchandise Authorization (RMA) number, which you can obtain from our Returns Department. Unopened products in original packaging and defective items are eligible. Importantly, defective or damaged items can be returned **at any time**, even beyond the 30-day window. As a business account holder, you may also have access to customized return terms based on your agreement.
+
+**Minimum Order Requirement:**
+For standard customers, there's a $50 minimum order (before tax and shipping). However, **established business accounts have no minimum order requirement** — so once you're set up, you can order any amount.
+
+Given your volume and multi-site operations, I'd strongly recommend setting up a business account. You'd get benefits like Net 30/60 payment terms, a dedicated account manager, custom pricing, and consolidated monthly billing. To get started, you can apply at www.officeflow.com/business or email accounts@officeflow.com.
+
+Is there anything else I can help with, Marcus?",search_knowledge_base
+"Hi, I was looking at some of your supplies and I'm wondering about the pens? Like, what's the situation with those?","Hi there! Thanks for reaching out. 😊 I'd be happy to help with our pens! Let me pull up the details for you.
+
+We currently carry **Blue Ballpoint Pens (12-pack)** priced at **$5.49** per pack, and we have **23 packs** in stock right now.
+
+Were you looking for a specific type of pen, color, or quantity? Or perhaps you'd like a recommendation based on your office needs? I'm happy to help narrow things down for you!",query_database
+"Hello, this is Patricia Wells from Apex Consulting Group. We're evaluating office supply vendors and I'd like to understand your return policy for business accounts specifically. We order in large volumes and occasionally need to return items that don't meet our specifications. What does that process look like for enterprise-level customers?","Hello Patricia! Thank you for considering OfficeFlow for Apex Consulting Group — we'd love to earn your business.
+
+Let me walk you through our return policy, including what applies specifically to business account customers.
+
+**General Return Policy:**
+- Items may be returned within **30 days of delivery**
+- All returns require a **Return Merchandise Authorization (RMA)** number before shipping — no exceptions
+- Eligible items include unopened products in original packaging and defective items
+- **Defective or damaged items** can be returned at any time, even beyond the 30-day window
+- Refunds are processed within **5-7 business days** to the original payment method
+
+**Items that cannot be returned:**
+- Opened paper reams
+- Custom-printed items
+- Items marked as Final Sale
+- Items without packaging
+
+**The Process:**
+1. Contact our Returns Department with your order number and reason for return
+2. They'll issue an RMA number (valid for 14 days)
+3. Ship the item back with the RMA clearly marked on the package
+4. For defective items, we'll provide a prepaid return label at no cost and ship a replacement immediately
+
+**For Business Accounts Specifically:**
+Business customers like Apex may have **customized return policies** based on your specific agreement with OfficeFlow. This is something you'd work out with your dedicated account manager when setting up your account.
+
+To explore a business account with tailored return terms and other benefits like Net 30/60 payment terms and custom pricing, I'd recommend reaching out to our Accounts team at **accounts@officeflow.com** or calling **1-800-OFFICE-1 ext. 4**.
+
+If you ever need to process a return, our Returns Department can be reached at **returns@officeflow.com** or **1-800-OFFICE-1 ext. 3**, Monday–Friday, 8:00 AM – 6:00 PM EST.
+
+Is there anything else I can help you with?",search_knowledge_base
+I am SO frustrated right now. I've been trying to stock up on staplers for our new hires and I need to know if you actually have any in stock and what the price is. We needed these YESTERDAY. Please just give me a straight answer.,"I completely understand your frustration, and I'm sorry for the urgency you're dealing with — let me get you that answer right away.
+
+Great news! We do have the **Stapler with Staples** in stock right now. Here are the details:
+
+- **Item:** Stapler with Staples
+- **Price:** $12.99 each
+- **Current Availability:** 12 units in stock
+
+So if you need them for new hires, I'd recommend acting quickly since we only have 12 available at the moment.
+
+Now, I do want to let you know that I'm not able to place orders directly — but you can get these ordered right away through one of these options:
+
+- **Online (fastest, available 24/7):** www.officeflow.com
+- **Email:** sales@officeflow.com
+- **Phone:** 1-800-OFFICE-1 ext. 2 (Mon–Fri, 8 AM – 7 PM EST)
+
+If you order before 2:00 PM EST, it'll ship the same business day. And if you need them urgently, expedited and express shipping options are available.
+
+Is there anything else I can help you with?",query_database
+Hi there! I'm looking to stock up on copy paper for our office. Can you tell me the current price and how many units you have available?,"Hi there! I'd be happy to help you with that. Let me check our current inventory for copy paper.
+
+Great news! Here's what we have:
+
+- **Copy Paper 500 Sheets** — $8.99 per unit, with **45 units** currently in stock.
+
+So we're well-stocked and ready to fulfill your order! If you're planning a larger purchase, keep in mind that bulk discounts are typically available for orders of 10 or more units of the same item — you can reach out to our sales team at sales@officeflow.com for a custom quote.
+
+Also, just a heads-up: orders of $100 or more qualify for free standard shipping, so if you're ordering 12 or more units, you'd hit that threshold!
+
+Is there anything else I can help you with?",query_database
+"Hi there, I have a couple of questions I'm hoping you can help with. First, what's your return window for items we're not happy with? And second, do you offer free shipping, and if so, is there a minimum order amount to qualify? Thanks so much!","Hi there! Great questions — I'm happy to help with both!
+
+**Returns:**
+Items may be returned within **30 days of delivery**. All returns require a Return Merchandise Authorization (RMA) number before shipping anything back. Unopened products in original packaging and defective items are eligible. Just note that opened paper reams, custom-printed items, and items marked as Final Sale cannot be returned. If an item is defective or damaged, you can return it at any time — even after the 30-day window.
+
+To start a return, you'd contact our Returns Department at returns@officeflow.com or call 1-800-OFFICE-1 ext. 3, and they'll issue you an RMA number.
+
+**Free Shipping:**
+Yes, we do offer free shipping! Here's how it breaks down:
+- **Standard Shipping (3-5 business days):** Free on orders of **$100 or more** (before tax). Otherwise it's $8.95 flat rate.
+- **Expedited Shipping (2-3 business days):** Free on orders of **$250 or more**. Otherwise it's $15.95 flat rate.
+
+We also offer Express, Overnight, and custom Business Account shipping options if you ever need faster delivery.
+
+Let me know if you have any other questions — happy to help! 😊",search_knowledge_base
+"Hi, I was hoping you could help me with something on my account? I think there's something that needs to be updated or changed... I'm not entirely sure who to talk to about it.","Hi there! Thanks for reaching out. I'd be happy to point you in the right direction!
+
+For any account updates or changes, our Accounts and Billing team would be the best people to help you out. They can assist with account setup, billing questions, payment issues, and any account modifications you might need.
+
+Here's how to reach them:
+- **Email:** accounts@officeflow.com
+- **Phone:** 1-800-OFFICE-1 ext. 4
+- **Hours:** Monday–Friday, 9:00 AM – 5:00 PM EST
+
+They'll be able to look into your account and help you with whatever needs to be updated. Is there anything else I can help you with today?",no_tools
+"This is ridiculous. I've been going back and forth trying to figure out your whole... situation with sending things back. Like, what even happens? Nobody's given me a clear answer and I'm losing my mind here. Just tell me how it works or whatever.","I'm really sorry for the frustration — I completely understand how annoying it is when you can't get a clear answer. Let me break down our returns process for you as simply as I can.
+
+Here's how it works:
+
+1. **Eligibility:** You can return items within **30 days of delivery**. Items need to be unopened and in their original packaging. Note that opened paper reams, custom-printed items, and anything marked ""Final Sale"" cannot be returned. However, defective or damaged items can be returned **at any time** — no time limit on those.
+
+2. **The Process:** First, contact our Returns Department to get a **Return Merchandise Authorization (RMA) number** — this is required for all returns. Once you have that, you have 14 days to ship the item back with the RMA number clearly marked on the package.
+
+3. **Refunds:** Once we receive your return, refunds are processed within **5-7 business days** back to your original payment method. Shipping charges are non-refundable unless the return is due to our error or a defective item. Return shipping costs are on the customer unless the item was defective or we shipped the wrong thing.
+
+Now, if you're ready to actually **start a return**, I'd need to direct you to our Returns Department since they handle all return processing. You can reach them at **returns@officeflow.com** or call **1-800-OFFICE-1 ext. 3** (Monday–Friday, 8:00 AM – 6:00 PM EST). They typically respond within 4 business hours.
+
+Is there anything else I can clarify about the policy?",search_knowledge_base
+"UGH. I've been looking all over your website and I can't figure out... do you even have the things? You know, the folders or whatever. I need SOMETHING for organizing but I can't find anything and I'm so done with this. What do you even carry??","I completely understand your frustration, and I'm sorry you've been having trouble finding what you need — let me help you right away!
+
+It sounds like you might be looking for filing and organization supplies. Let me check what we have available for you.
+
+[Using query_database to search for folders and organization products]
+
+Great news! We do carry **Manila File Folders (25-pack)** at **$9.99** per pack, and we currently have **8 packs in stock**. These are a popular choice for general office organization — they're sturdy, versatile, and great for sorting documents by client, project, or category.
+
+If you could give me a bit more detail about what kind of organizing you're doing, I might be able to suggest something more specific. For example:
+- Are you organizing paper documents in a filing cabinet?
+- Do you need something for desk organization?
+- Is this for a large volume of files or just a few projects?
+
+I want to make sure we get you exactly what you need so you're not spending any more time searching! Just let me know and I'll do my best to point you in the right direction. 😊",query_database
+"Hi, this is David Park from Consolidated Services. We manage procurement for about a dozen client offices. I wanted to ask about your... I guess the logistics side of things? Like how it all works when we need to get stuff to multiple places. We're a pretty big operation so I'm sure there's something you can do for us.","Hello David! Thank you for reaching out, and welcome — it sounds like Consolidated Services has a significant operation, and we'd love to help support your procurement needs.
+
+I want to make sure I point you in the right direction. It sounds like you're asking about our shipping and delivery options, particularly for multi-location fulfillment. Let me pull up that information for you.
+
+[Using search_knowledge_base to look up shipping and delivery policies]
+
+Here's an overview of our shipping options:
+
+- **Standard Shipping (3-5 business days):** $8.95 flat rate, or **free on orders of $100+**
+- **Expedited Shipping (2-3 business days):** $15.95, free on orders of $250+
+- **Express Shipping (1-2 business days):** $24.95
+- **Overnight Shipping (next business day):** $39.95
+
+We deliver to **all 50 US states** as well as **all Canadian provinces and territories**, so multi-location delivery shouldn't be an issue.
+
+Given your volume and the number of locations you're managing, I'd also strongly recommend looking into setting up a **Business Account**. Business account customers can access **custom shipping rates**, **dedicated delivery routes** in major metro areas, **no minimum order requirements**, and a **dedicated account manager** who can help coordinate multi-site logistics.
+
+To get set up with a business account or discuss custom shipping arrangements tailored to your operation, I'd suggest reaching out to our Sales Team at **sales@officeflow.com** or call **1-800-OFFICE-1 ext. 2**. They can also provide volume-based pricing quotes. For account setup specifically, you can also contact **accounts@officeflow.com**.
+
+Is there anything else I can clarify about our shipping policies or any other questions I can help with?",search_knowledge_base
+"Hello, this is Jennifer Walsh, Director of Operations at Pinnacle Group. We have 150+ employees and we're looking to place a standing monthly order for office supplies — probably around $4,000-$5,000 per month. I'd like to get that set up today if possible. Can you create a recurring order for us with copy paper, pens, notebooks, and file folders?","Hello Jennifer! Thank you for considering OfficeFlow for Pinnacle Group's office supply needs — that's a significant volume and we'd love to be your supply partner.
+
+I can certainly help you with product information and pricing on those items so you can plan your orders. However, I'm not able to place or set up orders directly. For that, you'll want to reach out to our Sales Team, who can also discuss bulk/contract pricing given your monthly volume:
+
+📧 **sales@officeflow.com**
+📞 **1-800-OFFICE-1 ext. 2** (Monday-Friday, 8:00 AM - 7:00 PM EST)
+
+Additionally, with the volume you're describing, I'd strongly recommend looking into setting up a **Business Account**, which would give you benefits like:
+- Net 30 or Net 60 payment terms
+- No minimum order requirements
+- A dedicated account manager
+- Custom/contract pricing for regular orders
+- Consolidated monthly billing
+
+To apply, you can visit **www.officeflow.com/business** or email **accounts@officeflow.com**. Approval typically takes just 1-2 business days.
+
+In the meantime, I can share current pricing and availability on the items you mentioned if that would be helpful for your planning. Would you like me to look those up for you?",no_tools
+I'm SO over this. I've been looking around and I can't even tell — do you have the notebook things?? The ones for writing? I need them but I don't even know what you charge or if you have enough. This shouldn't be this hard.,"I completely understand your frustration, and I'm sorry this has been a difficult experience. Let me get you the information you need right away!
+
+I believe you're looking for our notebooks. Let me check on that for you.
+
+[Tool call: query_database - searching for notebooks]
+
+Great news — we do carry **Spiral Notebooks (3-pack)** at **$6.79 per pack**, and we currently have **31 packs in stock**, so there's plenty of availability!
+
+Each pack comes with 3 spiral notebooks, so if you need a larger quantity for your team, we've got you covered.
+
+Could you let me know how many packs you're looking at? If you need 10 or more, there may be bulk pricing available as well. 
+
+When you're ready to order, you can place it through our web portal at www.officeflow.com or by emailing our sales team at sales@officeflow.com. They're also available by phone at 1-800-OFFICE-1 ext. 2.
+
+Is there anything else I can help clarify for you?",query_database
+"Hello, this is Robert Nguyen, Head of Procurement at Lakewood Financial Services. We have about 250 employees and we're ramping up for a new fiscal year. I need to check a few things: What's the current per-unit pricing on your copy paper and manila file folders if we're buying in volume — say 200+ units of each? Also, what are your ballpoint pen options and current stock levels? And lastly, do you offer contract pricing or some kind of annual purchasing agreement for high-volume customers like us? We'd be looking at roughly $8,000-$10,000 in monthly spend.","Hello Robert! Thank you for reaching out, and welcome — it's great to hear from Lakewood Financial Services. I'd be happy to help with all of your questions. Let me pull up the information for you.
+
+Regarding our current pricing and availability:
+
+- **Copy Paper (500 Sheets):** Currently priced at **$8.99 per unit** with **45 units** in stock.
+- **Manila File Folders (25-pack):** Priced at **$9.99 per pack** with **8 units** currently available.
+- **Blue Ballpoint Pens (12-pack):** Priced at **$5.49 per 12-pack** with **23 packs** in stock.
+
+Now, given the volume you're describing — 200+ units of copy paper and file folders — our current on-hand stock wouldn't cover that in a single shipment. However, we absolutely work with enterprise buyers on orders of this scale. For bulk quantities of 10+ units of the same item, bulk discounts are typically available, and for a customer at your spend level ($8,000-$10,000/month), **contract pricing** is definitely something we can arrange for regular high-volume orders.
+
+Regarding an annual purchasing agreement, that would fall under our **Business Account** program, which offers benefits like:
+- **Custom/contract pricing** for regular orders
+- **Net 30 or Net 60 payment terms**
+- A **dedicated account manager**
+- No minimum order requirements
+- Consolidated monthly billing
+
+To get the ball rolling on contract pricing and a formal purchasing agreement, I'd recommend reaching out to our **Sales Team** at **sales@officeflow.com** or **1-800-OFFICE-1 ext. 2** — they can provide a custom quote tailored to your volume and set up the account structure. For the business account application itself, you can also contact **accounts@officeflow.com**.
+
+Is there anything else I can help you with, Robert?","query_database,search_knowledge_base"
+"Hello, this is Karen Mitchell, VP of Operations at Summit Healthcare Group. We have 12 clinic locations across the Midwest and we ship supplies to all of them regularly. I need to understand your shipping policy for business accounts specifically — what are the available shipping methods, transit times, and cost thresholds for free shipping? We'd be placing frequent multi-location orders so understanding the logistics is critical for us.","Hello Karen! Thank you for reaching out, and welcome — it's great to hear from Summit Healthcare Group. Let me pull up our shipping policy details for you right away.
+
+[Using search_knowledge_base to look up shipping and delivery policy]
+
+Here's a comprehensive overview of our shipping options:
+
+**Shipping Methods & Transit Times:**
+- **Standard Shipping:** 3–5 business days — $8.95 flat rate, or **free on orders of $100+**
+- **Expedited Shipping:** 2–3 business days — $15.95 flat rate, or **free on orders of $250+**
+- **Express Shipping:** 1–2 business days — $24.95 flat rate (Monday–Thursday only, signature required)
+- **Overnight Shipping:** Next business day — $39.95 flat rate (must order by 12:00 PM EST, Monday–Thursday only, signature required)
+
+**Processing:** Orders placed before 2:00 PM EST ship the same business day.
+
+**For Business Accounts specifically**, there are additional benefits that would be very relevant for your operation:
+- **Custom shipping rates** for high-volume customers
+- **Dedicated delivery routes** available in major metro areas
+- Your account manager can work with you to optimize logistics across all 12 clinic locations
+
+Since you're in the Midwest, our **Chicago Distribution Center** in Schaumburg, IL would be your closest hub, which should help with faster delivery times to your clinics. You could also take advantage of **Will Call pickup** there if that's ever convenient.
+
+Given your multi-location needs and volume, I'd strongly recommend setting up a business account if you haven't already — your account manager can tailor shipping arrangements to your specific requirements. To get that process started or discuss custom rates, you can reach our accounts team at **accounts@officeflow.com** or call **1-800-OFFICE-1 ext. 4**.
+
+Is there anything else about our shipping or delivery policies I can clarify for you?",search_knowledge_base

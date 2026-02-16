@@ -6,7 +6,7 @@ Course materials for LangSmith Professional, with Python and TypeScript implemen
 
 ```
 ├── python/
-│   ├── officeflow_agent/          # OfficeFlow customer support agent (Emma)
+│   ├── officeflow-agent/          # OfficeFlow customer support agent (Emma)
 │   │   ├── agent_v0.py            # Baseline agent
 │   │   ├── agent_v1.py            # + LangSmith tracing
 │   │   ├── agent_v2.py            # + Enhanced tool instructions
@@ -16,7 +16,7 @@ Course materials for LangSmith Professional, with Python and TypeScript implemen
 │   │   ├── inventory/             # SQLite product databases
 │   │   └── knowledge_base/        # Company policy documents
 │   │
-│   ├── chapter-2/                              # Chapter 2: Evaluation fundamentals
+│   ├── module-2/                               # Module 2: Evaluation fundamentals
 │   │   ├── lesson-3/                           # SQL database evaluation
 │   │   │   ├── eval_database_usage.py          # Custom evaluator for SQL quality
 │   │   │   └── run_experiment.py               # LangSmith experiment runner
@@ -26,7 +26,7 @@ Course materials for LangSmith Professional, with Python and TypeScript implemen
 │   │       ├── eval_conciseness_pairwise.py    # Pairwise conciseness evaluator
 │   │       └── run_pairwise_experiment.py      # Pairwise experiment runner
 │   │
-│   ├── chapter-3/                          # Chapter 3: Synthetic data & advanced eval
+│   ├── module-3/                           # Module 3: Synthetic data & advanced eval
 │   │   ├── lesson-2/                       # Synthetic question generation pipeline
 │   │   │   ├── enumerate_categories.py     # Generate category combinations CSV
 │   │   │   ├── question_generator.py       # LLM-based question generation
