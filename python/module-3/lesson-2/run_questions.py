@@ -17,7 +17,6 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 
 async def main():
@@ -51,8 +50,10 @@ async def main():
 
     # Import agent and load knowledge base
     print("Loading agent...")
-    from officeflow_agent.agent_v5 import chat, load_knowledge_base
-    kb_dir = str(Path(__file__).resolve().parent.parent.parent / "officeflow_agent" / "knowledge_base")
+    agent_dir = Path(__file__).resolve().parent.parent.parent / "officeflow-agent"
+    sys.path.insert(0, str(agent_dir))
+    from agent_v5 import chat, load_knowledge_base
+    kb_dir = str(agent_dir / "knowledge_base")
     await load_knowledge_base(kb_dir)
     print()
 
