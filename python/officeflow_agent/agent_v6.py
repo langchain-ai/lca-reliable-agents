@@ -53,6 +53,9 @@ YOUR COMMUNICATION STYLE:
 - Use the customer's name if they provide it
 - Keep responses concise but thorough
 
+CONCISENESS PRIORITY:
+Your responses should be brief and to the point. Avoid unnecessary filler, repetition, or overly elaborate explanations. Get straight to the answer. If you can say something in one sentence, don't use three. Customers appreciate quick, direct answers over lengthy responses.
+
 IMPORTANT - CHECK DATABASE FIRST:
 When customers ask about products or inventory, ALWAYS check the database FIRST before asking clarifying questions. Give them useful information about what you find, rather than asking for more details upfront. For example, if a customer asks "do you have any paper?" - check what paper products are in stock and tell them what's available, don't ask "what type of paper are you looking for?"
 
@@ -64,6 +67,16 @@ INTERACTION GUIDELINES:
 5. End conversations by checking if they need anything else
 6. When you can't help directly, provide the specific contact or resource they need
 7. Never make up information - if you're unsure, say so and offer to connect them with someone who knows
+
+IMPORTANT - STOCK INFORMATION POLICY:
+When discussing product availability, NEVER reveal specific stock quantities or numbers to customers. Instead:
+- If quantity > 20: Say the item is "in stock" or "available"
+- If quantity 10-20: Say the item is "in stock, but running low" or "available, though inventory is limited" to create urgency
+- If quantity 5-9: Say "only a few left in stock" or "limited availability" to encourage quick action
+- If quantity 1-4: Say "very limited stock remaining" or "almost sold out"
+- If quantity 0: Say "currently out of stock" or "unavailable at the moment"
+
+This policy protects our competitive advantage and inventory management strategy while still helping customers make informed purchasing decisions.
 
 YOUR TOOLS:
 You have access to two powerful tools to help customers:
@@ -87,13 +100,13 @@ Choose the right tool based on what the customer is asking about. For questions 
 EXAMPLE INTERACTIONS:
 
 Customer: "Do you have copy paper?"
-You: "Yes, we do! We carry several types of copy paper. Are you looking for standard 8.5x11 inch letter size, or do you need a specific weight or finish? I can check what we have in stock."
+You: "Yes! We carry several types. Are you looking for standard 8.5x11, or a specific weight or finish?"
 
 Customer: "I need to return an order"
-You: "I understand you need to process a return. While I can't handle returns directly, our Returns Department will be happy to help you. You can reach them at returns@officeflow.com or call 1-800-OFFICE-1 ext. 3. They typically respond within 4 business hours. Do you need any other information I can help with?"
+You: "Our Returns Department handles that - reach them at returns@officeflow.com or 1-800-OFFICE-1 ext. 3. They respond within 4 business hours. Anything else I can help with?"
 
 Customer: "What's the best pen for signing documents?"
-You: "For document signing, I'd recommend a pen with archival-quality ink that won't fade over time. Let me check what we have available that would work well for that purpose."
+You: "For document signing, I'd recommend a pen with archival-quality ink. Let me check what we have available."
 
 Remember: You represent OfficeFlow's commitment to excellent customer service. Be helpful, honest, and human in every interaction."""
 
@@ -110,8 +123,38 @@ def query_database(query: str, db_path: str) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
 
+# OpenAI function calling schema
+QUERY_DATABASE_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "query_database",
+        "description": "SQL query to get information about our inventory for customers like products, quantities and prices.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": """SQL query to execute against the inventory database.
+
+YOU DO NOT KNOW THE SCHEMA. ALWAYS discover it first:
+1. Query 'SELECT name FROM sqlite_master WHERE type="table"' to see available tables
+2. Use 'PRAGMA table_info(table_name)' to inspect columns for each table
+3. Only after understanding the schema, construct your search queries
+
+SEARCH BEST PRACTICES (apply after schema discovery):
+- Product names/labels are usually descriptive and may contain the search term anywhere in the text
+- When searching text fields, use wildcards on BOTH sides: LIKE '%keyword%'
+- For case-insensitive search, wrap in LOWER(): LOWER(column) LIKE LOWER('%keyword%')
+- Do not assume text fields start with any particular pattern"""
+                }
+            },
+            "required": ["query"]
+        }
+    }
+}
+
 async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
-    """Load knowledge base documents and generate embeddings."""
+    """Load knowledge base documents and generate embeddings for WHOLE documents (no chunking)."""
     global knowledge_base_docs, knowledge_base_embeddings
 
     kb_path = Path(kb_dir)
@@ -122,6 +165,9 @@ async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
     # Load all .md files from knowledge base directory
     docs = []
     for file_path in kb_path.glob("*.md"):
+        # Skip the CHUNKING_NOTES.md file
+        if file_path.name == "CHUNKING_NOTES.md":
+            continue
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
             docs.append((file_path.name, content))
@@ -132,8 +178,8 @@ async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
 
     knowledge_base_docs = docs
 
-    # Generate embeddings for all documents
-    print(f"Generating embeddings for {len(docs)} documents...")
+    # Generate embeddings for ENTIRE documents (no chunking!)
+    print(f"Generating embeddings for {len(docs)} complete documents (no chunking)...")
     embeddings = []
     for filename, content in docs:
         response = await client.embeddings.create(
@@ -143,11 +189,11 @@ async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
         embeddings.append(response.data[0].embedding)
 
     knowledge_base_embeddings = embeddings
-    print(f"Knowledge base loaded: {len(docs)} documents indexed")
+    print(f"Knowledge base loaded: {len(docs)} documents indexed (whole docs, no chunks)")
 
 @traceable(name="search_knowledge_base")
 async def search_knowledge_base(query: str, top_k: int = 2) -> str:
-    """Search knowledge base using semantic similarity."""
+    """Search knowledge base using semantic similarity. Returns WHOLE documents, not chunks."""
     if not knowledge_base_docs or not knowledge_base_embeddings:
         return "Error: Knowledge base not loaded"
 
@@ -170,32 +216,13 @@ async def search_knowledge_base(query: str, top_k: int = 2) -> str:
     similarities.sort(key=lambda x: x[1], reverse=True)
     top_results = similarities[:top_k]
 
-    # Format results
+    # Format results - return ENTIRE documents
     results = []
     for idx, score in top_results:
         filename, content = knowledge_base_docs[idx]
         results.append(f"=== {filename} (relevance: {score:.3f}) ===\n{content}\n")
 
     return "\n".join(results)
-
-# OpenAI function calling schema
-QUERY_DATABASE_TOOL = {
-    "type": "function",
-    "function": {
-        "name": "query_database",
-        "description": "SQL query to get information about our inventory for customers like products, quantities and prices.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "query": {
-                    "type": "string",
-                    "description": "SQL query to execute against the inventory database"
-                }
-            },
-            "required": ["query"]
-        }
-    }
-}
 
 SEARCH_KNOWLEDGE_BASE_TOOL = {
     "type": "function",
