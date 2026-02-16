@@ -1,4 +1,7 @@
 import asyncio
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from langsmith import aevaluate
 from officeflow_agent.agent_v4 import chat
 from dotenv import load_dotenv
@@ -6,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Dataset with bound evaluator in UI
-dataset_name = "officeflow-db-code-test"
+dataset_name = "officeflow-dataset"
 
 async def chat_wrapper(inputs: dict) -> dict:
     """Wrapper to adapt dataset inputs to chat function signature."""

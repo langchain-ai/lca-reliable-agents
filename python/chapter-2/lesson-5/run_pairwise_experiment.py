@@ -1,13 +1,16 @@
 import asyncio
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from langsmith import aevaluate, evaluate
-from agent_v4 import chat as chat_v4, load_knowledge_base as load_kb_v4
-from agent_v5 import chat as chat_v5, load_knowledge_base as load_kb_v5
+from officeflow_agent.agent_v4 import chat as chat_v4, load_knowledge_base as load_kb_v4
+from officeflow_agent.agent_v5 import chat as chat_v5, load_knowledge_base as load_kb_v5
 from eval_conciseness_pairwise import conciseness_evaluator
 from dotenv import load_dotenv
 
 load_dotenv()
 
-DATASET_NAME = "officeflow-db-code-test"
+DATASET_NAME = "officeflow-dataset"
 
 async def chat_wrapper_v4(inputs: dict) -> dict:
     question = inputs.get("question", "")

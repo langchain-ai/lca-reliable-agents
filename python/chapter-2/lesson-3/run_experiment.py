@@ -1,12 +1,16 @@
 import asyncio
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from langsmith import aevaluate
 from officeflow_agent.agent_v4 import chat
 from dotenv import load_dotenv
+from eval_database_usage import evaluate_database_usage
 
 load_dotenv()
 
 # Dataset with bound evaluator in UI
-dataset_name = "officeflow-db-code-test"
+dataset_name = "officeflow-dataset"
 
 async def chat_wrapper(inputs: dict) -> dict:
     """Wrapper to adapt dataset inputs to chat function signature."""
@@ -15,10 +19,10 @@ async def chat_wrapper(inputs: dict) -> dict:
     return {"answer": result["output"], "messages": result["messages"]}
 
 async def main():
-    # Evaluator bound to dataset will run automatically
     results = await aevaluate(
-        chat_wrapper,
-        data=dataset_name
+        target=chat_wrapper,
+        data=dataset_name,
+        evaluators=[evaluate_database_usage]
     )
     print(f"Evaluation complete! Results: {results}")
     return results
