@@ -65,16 +65,6 @@ INTERACTION GUIDELINES:
 6. When you can't help directly, provide the specific contact or resource they need
 7. Never make up information - if you're unsure, say so and offer to connect them with someone who knows
 
-IMPORTANT - STOCK INFORMATION POLICY:
-When discussing product availability, NEVER reveal specific stock quantities or numbers to customers. Instead:
-- If quantity > 20: Say the item is "in stock" or "available"
-- If quantity 10-20: Say the item is "in stock, but running low" or "available, though inventory is limited" to create urgency
-- If quantity 5-9: Say "only a few left in stock" or "limited availability" to encourage quick action
-- If quantity 1-4: Say "very limited stock remaining" or "almost sold out"
-- If quantity 0: Say "currently out of stock" or "unavailable at the moment"
-
-This policy protects our competitive advantage and inventory management strategy while still helping customers make informed purchasing decisions.
-
 YOUR TOOLS:
 You have access to two powerful tools to help customers:
 
@@ -120,32 +110,8 @@ def query_database(query: str, db_path: str) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
 
-# OpenAI function calling schema
-QUERY_DATABASE_TOOL = {
-    "type": "function",
-    "function": {
-        "name": "query_database",
-        "description": "SQL query to get information about our inventory for customers like products, quantities and prices.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "query": {
-                    "type": "string",
-                    "description": """SQL query to execute against the inventory database.
-
-YOU DO NOT KNOW THE SCHEMA. ALWAYS discover it first:
-1. Query 'SELECT name FROM sqlite_master WHERE type="table"' to see available tables
-2. Use 'PRAGMA table_info(table_name)' to inspect columns for each table
-3. Only after understanding the schema, construct your search queries"""
-                }
-            },
-            "required": ["query"]
-        }
-    }
-}
-
-async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
-    """Load knowledge base documents and generate embeddings for WHOLE documents (no chunking)."""
+async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
+    """Load knowledge base documents and generate embeddings."""
     global knowledge_base_docs, knowledge_base_embeddings
 
     kb_path = Path(kb_dir)
@@ -156,9 +122,6 @@ async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
     # Load all .md files from knowledge base directory
     docs = []
     for file_path in kb_path.glob("*.md"):
-        # Skip the CHUNKING_NOTES.md file
-        if file_path.name == "CHUNKING_NOTES.md":
-            continue
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
             docs.append((file_path.name, content))
@@ -169,8 +132,8 @@ async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
 
     knowledge_base_docs = docs
 
-    # Generate embeddings for ENTIRE documents (no chunking!)
-    print(f"Generating embeddings for {len(docs)} complete documents (no chunking)...")
+    # Generate embeddings for all documents
+    print(f"Generating embeddings for {len(docs)} documents...")
     embeddings = []
     for filename, content in docs:
         response = await client.embeddings.create(
@@ -180,11 +143,11 @@ async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
         embeddings.append(response.data[0].embedding)
 
     knowledge_base_embeddings = embeddings
-    print(f"Knowledge base loaded: {len(docs)} documents indexed (whole docs, no chunks)")
+    print(f"Knowledge base loaded: {len(docs)} documents indexed")
 
 @traceable(name="search_knowledge_base")
 async def search_knowledge_base(query: str, top_k: int = 2) -> str:
-    """Search knowledge base using semantic similarity. Returns WHOLE documents, not chunks."""
+    """Search knowledge base using semantic similarity."""
     if not knowledge_base_docs or not knowledge_base_embeddings:
         return "Error: Knowledge base not loaded"
 
@@ -207,13 +170,32 @@ async def search_knowledge_base(query: str, top_k: int = 2) -> str:
     similarities.sort(key=lambda x: x[1], reverse=True)
     top_results = similarities[:top_k]
 
-    # Format results - return ENTIRE documents
+    # Format results
     results = []
     for idx, score in top_results:
         filename, content = knowledge_base_docs[idx]
         results.append(f"=== {filename} (relevance: {score:.3f}) ===\n{content}\n")
 
     return "\n".join(results)
+
+# OpenAI function calling schema
+QUERY_DATABASE_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "query_database",
+        "description": "SQL query to get information about our inventory for customers like products, quantities and prices.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "SQL query to execute against the inventory database"
+                }
+            },
+            "required": ["query"]
+        }
+    }
+}
 
 SEARCH_KNOWLEDGE_BASE_TOOL = {
     "type": "function",

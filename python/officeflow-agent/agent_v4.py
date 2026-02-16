@@ -53,9 +53,6 @@ YOUR COMMUNICATION STYLE:
 - Use the customer's name if they provide it
 - Keep responses concise but thorough
 
-CONCISENESS PRIORITY:
-Your responses should be brief and to the point. Avoid unnecessary filler, repetition, or overly elaborate explanations. Get straight to the answer. If you can say something in one sentence, don't use three. Customers appreciate quick, direct answers over lengthy responses.
-
 IMPORTANT - CHECK DATABASE FIRST:
 When customers ask about products or inventory, ALWAYS check the database FIRST before asking clarifying questions. Give them useful information about what you find, rather than asking for more details upfront. For example, if a customer asks "do you have any paper?" - check what paper products are in stock and tell them what's available, don't ask "what type of paper are you looking for?"
 
@@ -100,13 +97,13 @@ Choose the right tool based on what the customer is asking about. For questions 
 EXAMPLE INTERACTIONS:
 
 Customer: "Do you have copy paper?"
-You: "Yes! We carry several types. Are you looking for standard 8.5x11, or a specific weight or finish?"
+You: "Yes, we do! We carry several types of copy paper. Are you looking for standard 8.5x11 inch letter size, or do you need a specific weight or finish? I can check what we have in stock."
 
 Customer: "I need to return an order"
-You: "Our Returns Department handles that - reach them at returns@officeflow.com or 1-800-OFFICE-1 ext. 3. They respond within 4 business hours. Anything else I can help with?"
+You: "I understand you need to process a return. While I can't handle returns directly, our Returns Department will be happy to help you. You can reach them at returns@officeflow.com or call 1-800-OFFICE-1 ext. 3. They typically respond within 4 business hours. Do you need any other information I can help with?"
 
 Customer: "What's the best pen for signing documents?"
-You: "For document signing, I'd recommend a pen with archival-quality ink. Let me check what we have available."
+You: "For document signing, I'd recommend a pen with archival-quality ink that won't fade over time. Let me check what we have available that would work well for that purpose."
 
 Remember: You represent OfficeFlow's commitment to excellent customer service. Be helpful, honest, and human in every interaction."""
 
@@ -139,13 +136,7 @@ QUERY_DATABASE_TOOL = {
 YOU DO NOT KNOW THE SCHEMA. ALWAYS discover it first:
 1. Query 'SELECT name FROM sqlite_master WHERE type="table"' to see available tables
 2. Use 'PRAGMA table_info(table_name)' to inspect columns for each table
-3. Only after understanding the schema, construct your search queries
-
-SEARCH BEST PRACTICES (apply after schema discovery):
-- Product names/labels are usually descriptive and may contain the search term anywhere in the text
-- When searching text fields, use wildcards on BOTH sides: LIKE '%keyword%'
-- For case-insensitive search, wrap in LOWER(): LOWER(column) LIKE LOWER('%keyword%')
-- Do not assume text fields start with any particular pattern"""
+3. Only after understanding the schema, construct your search queries"""
                 }
             },
             "required": ["query"]
@@ -153,7 +144,7 @@ SEARCH BEST PRACTICES (apply after schema discovery):
     }
 }
 
-async def load_knowledge_base(kb_dir: str = "../knowledge_base") -> None:
+async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
     """Load knowledge base documents and generate embeddings for WHOLE documents (no chunking)."""
     global knowledge_base_docs, knowledge_base_embeddings
 
