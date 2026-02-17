@@ -2,7 +2,7 @@
 
 ## RETURN ELIGIBILITY
 
-Items may be returned within **30 days of delivery**. We want you to be completely satisfied. All returns require an RMA number before shipping. Unopened products in original packaging are eligible for return as well as defective items. However, opened paper reams cannot be returned due to hygiene standards, and custom-printed items are also ineligible. Products marked as Final Sale cannot be returned under any circumstances, and items without packaging are not accepted.
+Items may be returned within **60 days of delivery**. We want you to be completely satisfied with your purchase. All returns require an RMA number before shipping. Unopened products in original packaging are eligible for return as well as defective items. However, opened paper reams cannot be returned due to hygiene standards, and custom-printed items are also ineligible. Products marked as Final Sale cannot be returned under any circumstances, and items without packaging are not accepted.
 
 **IMPORTANT EXCEPTION:** Defective or damaged items can be returned at any time, even after the 30-day window has passed. Items shipped in error are also always eligible.
 

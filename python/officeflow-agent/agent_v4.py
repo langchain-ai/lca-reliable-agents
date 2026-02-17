@@ -144,19 +144,29 @@ YOU DO NOT KNOW THE SCHEMA. ALWAYS discover it first:
     }
 }
 
-async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
-    """Load knowledge base documents and generate embeddings for WHOLE documents (no chunking)."""
+def _embeddings_are_stale(kb_path: Path, cache_path: Path) -> bool:
+    """Check if any document has been modified after the embeddings were generated."""
+    if not cache_path.exists():
+        return True
+
+    cache_mtime = cache_path.stat().st_mtime
+
+    for file_path in kb_path.glob("*.md"):
+        if file_path.name == "CHUNKING_NOTES.md":
+            continue
+        if file_path.stat().st_mtime > cache_mtime:
+            print(f"  Stale: {file_path.name} was modified after embeddings were generated")
+            return True
+
+    return False
+
+
+async def _generate_and_cache_embeddings(kb_path: Path, cache_path: Path) -> None:
+    """Generate embeddings for all documents and save to cache."""
     global knowledge_base_docs, knowledge_base_embeddings
 
-    kb_path = Path(kb_dir)
-    if not kb_path.exists():
-        print(f"Warning: Knowledge base directory '{kb_dir}' not found")
-        return
-
-    # Load all .md files from knowledge base directory
     docs = []
     for file_path in kb_path.glob("*.md"):
-        # Skip the CHUNKING_NOTES.md file
         if file_path.name == "CHUNKING_NOTES.md":
             continue
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -164,13 +174,12 @@ async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
             docs.append((file_path.name, content))
 
     if not docs:
-        print(f"Warning: No documents found in '{kb_dir}'")
+        print(f"Warning: No documents found in '{kb_path}'")
         return
 
     knowledge_base_docs = docs
 
-    # Generate embeddings for ENTIRE documents (no chunking!)
-    print(f"Generating embeddings for {len(docs)} complete documents (no chunking)...")
+    print(f"Generating embeddings for {len(docs)} documents...")
     embeddings = []
     for filename, content in docs:
         response = await client.embeddings.create(
@@ -178,9 +187,43 @@ async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
             input=content
         )
         embeddings.append(response.data[0].embedding)
+        print(f"  {filename}")
 
     knowledge_base_embeddings = embeddings
-    print(f"Knowledge base loaded: {len(docs)} documents indexed (whole docs, no chunks)")
+
+    # Save to cache
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    cache_data = {"docs": docs, "embeddings": embeddings}
+    with open(cache_path, 'w') as f:
+        json.dump(cache_data, f)
+    print(f"Embeddings cached to {cache_path}")
+
+
+async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
+    """Load knowledge base documents and embeddings for WHOLE documents (no chunking).
+
+    Automatically regenerates embeddings if any source documents have been modified.
+    """
+    global knowledge_base_docs, knowledge_base_embeddings
+
+    kb_path = Path(kb_dir) / "documents"
+    cache_path = Path(kb_dir) / "embeddings" / "embeddings.json"
+
+    if not kb_path.exists():
+        print(f"Warning: Knowledge base directory '{kb_dir}' not found")
+        return
+
+    # Check if embeddings need to be regenerated
+    if _embeddings_are_stale(kb_path, cache_path):
+        print("Knowledge base documents changed, regenerating embeddings...")
+        await _generate_and_cache_embeddings(kb_path, cache_path)
+    else:
+        # Load from cache
+        with open(cache_path, 'r') as f:
+            cache_data = json.load(f)
+        knowledge_base_docs = [tuple(doc) for doc in cache_data["docs"]]
+        knowledge_base_embeddings = cache_data["embeddings"]
+        print(f"Knowledge base loaded from cache: {len(knowledge_base_docs)} documents")
 
 @traceable(name="search_knowledge_base")
 async def search_knowledge_base(query: str, top_k: int = 2) -> str:

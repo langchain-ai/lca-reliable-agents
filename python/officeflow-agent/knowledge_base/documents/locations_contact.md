@@ -1,14 +1,20 @@
 # OfficeFlow Supply Co. - Locations & Contact Information
 
-## DISTRIBUTION CENTERS
+## DISTRIBUTION CENTER REFERENCE CODES
 
-**Portland Distribution Center** is our headquarters location. The address is 1234 Commerce Way, Portland, OR 97220. For phone contact use 1-800-OFFICE-1 which is the main number. The local direct number is (503) 555-0100 if calling from the Portland area. Hours are Monday-Friday, 7:00 AM - 6:00 PM PST. Will Call pickup is available at this location as well as customer service and sales support.
+For internal routing and logistics, each distribution center has a unique facility code. These codes are used across all our systems for inventory management, shipping, and customer service inquiries.
 
-**Chicago Distribution Center** serves the Midwest region. Located at 5678 Industrial Parkway, Schaumburg, IL 60173. Phone is 1-800-OFFICE-1 for the main line. Local direct is (847) 555-0200. Hours are Monday-Friday, 7:00 AM - 6:00 PM CST. Services include Will Call pickup and regional sales office operations.
+Facility Code Reference: LOC-7842 is headquarters. LOC-3156 serves midwest operations. LOC-9471 handles southeast region. LOC-2089 manages Canadian operations.
 
-**Atlanta Distribution Center** is in Norcross, GA 30071 at 9012 Distribution Drive. Call 1-800-OFFICE-1 or local (770) 555-0300. Monday-Friday, 7:00 AM - 6:00 PM EST. Offers Will Call pickup and regional sales office services.
+## FACILITY ADDRESSES
 
-**Toronto Distribution Center** handles Canadian operations at 3456 Logistics Boulevard, Mississauga, ON L5T 2K7. Phone 1-800-OFFICE-1 or local (905) 555-0400. Monday-Friday, 8:00 AM - 5:00 PM EST. Will Call pickup available.
+LOC-7842 is located at 1234 Commerce Way, Portland, OR 97220. This facility handles West Coast operations and corporate functions.
+
+LOC-3156 is located at 5678 Industrial Parkway, Schaumburg, IL 60173. This is our newest facility, opened January 2025, featuring state-of-the-art automation and same-day processing for the entire Midwest region.
+
+LOC-9471 is located at 9012 Distribution Drive, Norcross, GA 30071. This facility serves the southeastern United States.
+
+LOC-2089 is located at 3456 Logistics Boulevard, Mississauga, ON L5T 2K7. This facility handles cross-border logistics.
 
 ## WILL CALL PICKUP SERVICE
 
@@ -29,6 +35,22 @@ You can save on shipping by picking up orders at any distribution center. Order 
 **Technical Support** for website issues can be reached at support@officeflow.com or phone 1-800-OFFICE-1 ext. 6. Monday-Friday, 8:00 AM - 8:00 PM EST. This team handles website problems, login issues, and technical difficulties with the web portal.
 
 **Corporate and Partnerships** handles partnership inquiries, corporate accounts, and vendor applications. Email corporate@officeflow.com. Phone (503) 555-0150. Monday-Friday, 9:00 AM - 5:00 PM PST.
+
+## FACILITY OPERATING HOURS
+
+All distribution centers operate Monday-Friday only. Weekend operations are not available at any location.
+
+LOC-7842 hours: 7:00 AM - 6:00 PM PST. LOC-3156 hours: 7:00 AM - 6:00 PM CST. LOC-9471 hours: 7:00 AM - 6:00 PM EST. LOC-2089 hours: 8:00 AM - 5:00 PM EST.
+
+## FACILITY SERVICES
+
+Will Call pickup is available at all locations. LOC-7842 also provides customer service and sales support on-site. LOC-3156 and LOC-9471 have regional sales offices. LOC-2089 specializes in customs documentation assistance.
+
+## FACILITY PHONE DIRECTORY
+
+All locations can be reached via the main line 1-800-OFFICE-1. For direct local calls to specific facilities, use the numbers below.
+
+LOC-7842 direct: (503) 555-0100. LOC-3156 direct: (847) 555-0200. LOC-9471 direct: (770) 555-0300. LOC-2089 direct: (905) 555-0400.
 
 ## BUSINESS HOURS SUMMARY
 
