@@ -1,9 +1,14 @@
 import asyncio
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+
+# Add parent directories to path for imports
+python_dir = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(python_dir))
+sys.path.insert(0, str(python_dir / "officeflow-agent"))
+
 from langsmith import aevaluate
-from officeflow_agent.agent_v4 import chat
+from agent_v4 import chat, load_knowledge_base
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,6 +23,12 @@ async def chat_wrapper(inputs: dict) -> dict:
     return {"answer": result["output"], "messages": result["messages"]}
 
 async def main():
+    # Load knowledge base before running evaluation
+    kb_path = str(python_dir / "officeflow-agent" / "knowledge_base")
+    print(f"Loading knowledge base from {kb_path}...")
+    await load_knowledge_base(kb_dir=kb_path)
+    print()
+
     # Evaluator bound to dataset will run automatically
     results = await aevaluate(
         chat_wrapper,

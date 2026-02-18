@@ -3,6 +3,9 @@ import sqlite3
 import json
 import os
 import uuid
+from pathlib import Path
+from typing import List, Tuple
+import numpy as np
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 from langsmith import traceable, Client
@@ -18,6 +21,10 @@ langsmith_client = Client()
 # Configuration
 LANGSMITH_PROJECT = os.getenv("LANGSMITH_PROJECT", "lca-ls-project")
 thread_id = str(uuid.uuid4())
+
+# Knowledge base storage (loaded on startup)
+knowledge_base_docs: List[Tuple[str, str]] = []  # List of (chunk_name, content) tuples
+knowledge_base_embeddings: List[List[float]] = []  # Corresponding embeddings
 
 system_prompt = """You are Emma, a customer support specialist for OfficeFlow Supply Co., a paper and office supplies distribution company serving small-to-medium businesses across North America.
 
@@ -57,6 +64,25 @@ INTERACTION GUIDELINES:
 5. End conversations by checking if they need anything else
 6. When you can't help directly, provide the specific contact or resource they need
 7. Never make up information - if you're unsure, say so and offer to connect them with someone who knows
+
+YOUR TOOLS:
+You have access to two powerful tools to help customers:
+
+1. query_database - Use this for product-related questions:
+   - Product availability and stock levels
+   - Product prices and pricing information
+   - Product details and specifications
+   - Searching for specific items in inventory
+
+2. search_knowledge_base - Use this for company policies and information:
+   - Returns and refunds policies
+   - Shipping and delivery information
+   - Ordering process and payment methods
+   - Store locations and contact information
+   - Company background and general info
+   - Business hours and holiday closures
+
+Choose the right tool based on what the customer is asking about. For questions about specific products, use the database. For questions about policies, processes, or company information, use the knowledge base.
 
 IMPORTANT - STOCK INFORMATION POLICY:
 When discussing product availability, NEVER reveal specific stock quantities or numbers to customers. Instead:
@@ -118,6 +144,119 @@ YOU DO NOT KNOW THE SCHEMA. ALWAYS discover it first:
     }
 }
 
+def chunk_text(text: str, chunk_size: int = 200, overlap: int = 20) -> List[str]:
+    """Split text into chunks with overlap."""
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = start + chunk_size
+        chunk = text[start:end]
+        if chunk.strip():
+            chunks.append(chunk)
+        start = end - overlap
+    return chunks
+
+async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
+    """Load knowledge base documents and embeddings from cache or generate them."""
+    global knowledge_base_docs, knowledge_base_embeddings
+    import json
+
+    kb_path = Path(kb_dir) / "documents"
+    cache_path = Path(kb_dir) / "embeddings" / "embeddings.json"
+
+    # Try to load from cache first
+    if cache_path.exists():
+        with open(cache_path, 'r') as f:
+            cache_data = json.load(f)
+        knowledge_base_docs = [tuple(doc) for doc in cache_data["docs"]]
+        knowledge_base_embeddings = cache_data["embeddings"]
+        print(f"Knowledge base loaded from cache: {len(knowledge_base_docs)} chunks")
+        return
+
+    # Fall back to generating embeddings
+    if not kb_path.exists():
+        print(f"Warning: Knowledge base directory '{kb_dir}' not found")
+        return
+
+    chunks = []
+    for file_path in kb_path.glob("*.md"):
+        if file_path.name == "CHUNKING_NOTES.md":
+            continue
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            file_chunks = chunk_text(content)
+            for i, chunk in enumerate(file_chunks):
+                chunks.append((f"{file_path.name}:chunk_{i}", chunk))
+
+    if not chunks:
+        print(f"Warning: No documents found in '{kb_dir}'")
+        return
+
+    knowledge_base_docs = chunks
+
+    print(f"Generating embeddings for {len(chunks)} chunks...")
+    embeddings = []
+    for chunk_name, content in chunks:
+        response = await client.embeddings.create(
+            model="text-embedding-3-small",
+            input=content
+        )
+        embeddings.append(response.data[0].embedding)
+
+    knowledge_base_embeddings = embeddings
+    print(f"Knowledge base loaded: {len(chunks)} chunks indexed")
+
+@traceable(name="search_knowledge_base")
+async def search_knowledge_base(query: str, top_k: int = 2) -> str:
+    """Search knowledge base using semantic similarity."""
+    if not knowledge_base_docs or not knowledge_base_embeddings:
+        return "Error: Knowledge base not loaded"
+
+    # Generate embedding for query
+    response = await client.embeddings.create(
+        model="text-embedding-3-small",
+        input=query
+    )
+    query_embedding = response.data[0].embedding
+
+    # Calculate cosine similarity with all chunks
+    similarities = []
+    for i, doc_embedding in enumerate(knowledge_base_embeddings):
+        similarity = np.dot(query_embedding, doc_embedding) / (
+            np.linalg.norm(query_embedding) * np.linalg.norm(doc_embedding)
+        )
+        similarities.append((i, similarity))
+
+    # Sort by similarity and get top k
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    top_results = similarities[:top_k]
+
+    # Format results
+    results = []
+    for idx, score in top_results:
+        chunk_name, content = knowledge_base_docs[idx]
+        results.append(f"=== {chunk_name} (relevance: {score:.3f}) ===\n{content}\n")
+
+    return "\n".join(results)
+
+SEARCH_KNOWLEDGE_BASE_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "search_knowledge_base",
+        "description": "Search company knowledge base for information about policies, procedures, company info, shipping, returns, ordering, contact information, store locations, and business hours. Use this for non-product questions.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "Natural language question or search query about company policies or information"
+                }
+            },
+            "required": ["query"]
+        }
+    }
+}
+
 def get_thread_history(thread_id: str, project_name: str):
     """Gets conversation history from LangSmith traces."""
     # Filter runs by the specific thread and project
@@ -147,7 +286,7 @@ def get_thread_history(thread_id: str, project_name: str):
 async def chat(question: str) -> str:
     """Process a user question and return assistant response."""
     db_path = './inventory/inventory.db'
-    tools = [QUERY_DATABASE_TOOL]
+    tools = [QUERY_DATABASE_TOOL, SEARCH_KNOWLEDGE_BASE_TOOL]
 
     # Fetch conversation history from LangSmith traces
     run_tree = ls.get_current_run_tree()
@@ -194,11 +333,15 @@ async def chat(question: str) -> str:
         for tool_call in response_message.tool_calls:
             function_args = json.loads(tool_call.function.arguments)
 
-            # Handle query_database tool call
+            # Handle different tool calls
             if tool_call.function.name == "query_database":
                 result = query_database(
                     query=function_args.get("query"),
                     db_path=db_path
+                )
+            elif tool_call.function.name == "search_knowledge_base":
+                result = await search_knowledge_base(
+                    query=function_args.get("query")
                 )
             else:
                 result = f"Error: Unknown tool {tool_call.function.name}"
@@ -233,6 +376,11 @@ async def main():
     print("Office Supplies Support Chat")
     print("=" * 50)
     print(f"Thread ID: {thread_id}")
+    print()
+
+    # Load knowledge base on startup
+    await load_knowledge_base()
+    print()
     print("Type 'quit' or 'exit' to end the conversation\n")
 
     while True:

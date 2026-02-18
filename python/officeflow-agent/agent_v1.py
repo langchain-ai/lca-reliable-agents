@@ -110,32 +110,59 @@ def query_database(query: str, db_path: str) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
 
-async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
-    """Load knowledge base documents and generate embeddings."""
-    global knowledge_base_docs, knowledge_base_embeddings
+def chunk_text(text: str, chunk_size: int = 200, overlap: int = 20) -> List[str]:
+    """Split text into chunks with overlap."""
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = start + chunk_size
+        chunk = text[start:end]
+        if chunk.strip():
+            chunks.append(chunk)
+        start = end - overlap
+    return chunks
 
-    kb_path = Path(kb_dir)
+async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
+    """Load knowledge base documents and embeddings from cache or generate them."""
+    global knowledge_base_docs, knowledge_base_embeddings
+    import json
+
+    kb_path = Path(kb_dir) / "documents"
+    cache_path = Path(kb_dir) / "embeddings" / "embeddings.json"
+
+    # Try to load from cache first
+    if cache_path.exists():
+        with open(cache_path, 'r') as f:
+            cache_data = json.load(f)
+        knowledge_base_docs = [tuple(doc) for doc in cache_data["docs"]]
+        knowledge_base_embeddings = cache_data["embeddings"]
+        print(f"Knowledge base loaded from cache: {len(knowledge_base_docs)} chunks")
+        return
+
+    # Fall back to generating embeddings
     if not kb_path.exists():
         print(f"Warning: Knowledge base directory '{kb_dir}' not found")
         return
 
-    # Load all .md files from knowledge base directory
-    docs = []
+    chunks = []
     for file_path in kb_path.glob("*.md"):
+        if file_path.name == "CHUNKING_NOTES.md":
+            continue
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-            docs.append((file_path.name, content))
+            file_chunks = chunk_text(content)
+            for i, chunk in enumerate(file_chunks):
+                chunks.append((f"{file_path.name}:chunk_{i}", chunk))
 
-    if not docs:
+    if not chunks:
         print(f"Warning: No documents found in '{kb_dir}'")
         return
 
-    knowledge_base_docs = docs
+    knowledge_base_docs = chunks
 
-    # Generate embeddings for all documents
-    print(f"Generating embeddings for {len(docs)} documents...")
+    print(f"Generating embeddings for {len(chunks)} chunks...")
     embeddings = []
-    for filename, content in docs:
+    for chunk_name, content in chunks:
         response = await client.embeddings.create(
             model="text-embedding-3-small",
             input=content
@@ -143,7 +170,7 @@ async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
         embeddings.append(response.data[0].embedding)
 
     knowledge_base_embeddings = embeddings
-    print(f"Knowledge base loaded: {len(docs)} documents indexed")
+    print(f"Knowledge base loaded: {len(chunks)} chunks indexed")
 
 @traceable(name="search_knowledge_base")
 async def search_knowledge_base(query: str, top_k: int = 2) -> str:
