@@ -36,7 +36,7 @@ async function concisenessEvaluator({
   const scores: Record<string, number> = {};
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o",
+    model: "gpt-5-nano",
     messages: [
       { role: "system", content: "You are a conciseness evaluator. Respond with only a single number: 0, 1, or 2." },
       { role: "user", content: CONCISENESS_PROMPT

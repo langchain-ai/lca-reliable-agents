@@ -26,7 +26,7 @@ Output your verdict as a single number:
 
 def conciseness_evaluator(inputs: dict, outputs: list[dict]) -> list[int]:
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-5-nano",
         messages=[
             {"role": "system", "content": "You are a conciseness evaluator. Respond with only a single number: 0, 1, or 2."},
             {"role": "user", "content": CONCISENESS_PROMPT.format(
