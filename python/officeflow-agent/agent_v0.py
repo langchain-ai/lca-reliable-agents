@@ -238,7 +238,7 @@ SEARCH_KNOWLEDGE_BASE_TOOL = {
 
 async def chat(question: str) -> str:
     """Process a user question and return assistant response."""
-    db_path = './inventory/inventory.db'
+    db_path = str(Path(__file__).parent / 'inventory' / 'inventory.db')
     tools = [QUERY_DATABASE_TOOL, SEARCH_KNOWLEDGE_BASE_TOOL]
 
     # Build messages with conversation history
