@@ -46,6 +46,10 @@ LANGSMITH_PROJECT=lca-reliable-agents
 #LANGSMITH_ENDPOINT=https://eu.api.smith.langchain.com
 ```
 
+Create a [LangSmith](https://smith.langchain.com/) account and API Key.  
+Get and OpenAI API Key [here](https://openai.com/index/openai-api/).  
+Optional, an Anthropic API Key [here](https://console.anthropic.com)  
+
 Make a virtual environment and install dependencies. [More info](#python-virtual-environments)
 
 <details open>
