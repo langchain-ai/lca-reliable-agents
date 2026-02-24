@@ -2,13 +2,12 @@ import asyncio
 import sqlite3
 import json
 import os
-import uuid
 from pathlib import Path
 from typing import List, Tuple
 import numpy as np
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
-from langsmith import traceable
+from langsmith import traceable, uuid7
 from langsmith.wrappers import wrap_openai
 
 load_dotenv()
@@ -17,10 +16,10 @@ load_dotenv()
 client = wrap_openai(AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY")))
 
 # Configuration
-thread_id = str(uuid.uuid4())
+thread_id = str(uuid7())
 
-# Using a local file to store thread history. For production use, use a persistent storage solution.
-THREAD_HISTORY_FILE = os.path.join(os.path.dirname(__file__), "thread_history.json")
+# Conversation history store (use a database in production)
+thread_store: dict[str, list] = {}
 
 # Knowledge base storage (loaded on startup)
 knowledge_base_docs: List[Tuple[str, str]] = []  # List of (filename, content) tuples
@@ -110,7 +109,7 @@ You: "For document signing, I'd recommend a pen with archival-quality ink. Let m
 
 Remember: You represent OfficeFlow's commitment to excellent customer service. Be helpful, honest, and human in every interaction."""
 
-@traceable(name="query_database")
+@traceable(name="query_database", run_type="tool")
 def query_database(query: str, db_path: str) -> str:
     """Execute SQL query against the inventory database."""
     try:
@@ -234,7 +233,7 @@ async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
         knowledge_base_embeddings = cache_data["embeddings"]
         print(f"Knowledge base loaded from cache: {len(knowledge_base_docs)} documents")
 
-@traceable(name="search_knowledge_base")
+@traceable(name="search_knowledge_base", run_type="tool")
 async def search_knowledge_base(query: str, top_k: int = 2) -> str:
     """Search knowledge base using semantic similarity. Returns WHOLE documents, not chunks."""
     if not knowledge_base_docs or not knowledge_base_embeddings:
@@ -285,17 +284,11 @@ SEARCH_KNOWLEDGE_BASE_TOOL = {
     }
 }
 
-def get_thread_history() -> list:
-    """Gets conversation history from local storage."""
-    if not os.path.exists(THREAD_HISTORY_FILE):
-        return []
-    with open(THREAD_HISTORY_FILE, "r") as f:
-        return json.load(f)
+def get_thread_history(thread_id: str) -> list:
+    return thread_store.get(thread_id, [])
 
-def save_thread_history(messages: list):
-    """Saves conversation history to local storage."""
-    with open(THREAD_HISTORY_FILE, "w") as f:
-        json.dump(messages, f, indent=2, default=str)
+def save_thread_history(thread_id: str, messages: list):
+    thread_store[thread_id] = messages
 
 @traceable(name="Emma", metadata={"thread_id": thread_id})
 async def chat(question: str) -> str:
@@ -304,7 +297,7 @@ async def chat(question: str) -> str:
     tools = [QUERY_DATABASE_TOOL, SEARCH_KNOWLEDGE_BASE_TOOL]
 
     # Fetch conversation history from local storage
-    history_messages = get_thread_history()
+    history_messages = get_thread_history(thread_id)
 
     # Build messages with history
     messages = [
@@ -384,15 +377,11 @@ async def chat(question: str) -> str:
     })
 
     # Save conversation history (everything except system prompt)
-    save_thread_history(messages[1:])
+    save_thread_history(thread_id, messages[1:])
 
     return {"messages": messages, "output": final_content}
 
 async def main():
-    # Clear history from previous runs
-    if os.path.exists(THREAD_HISTORY_FILE):
-        os.remove(THREAD_HISTORY_FILE)
-
     print("Office Supplies Support Chat")
     print("=" * 50)
     print(f"Thread ID: {thread_id}")

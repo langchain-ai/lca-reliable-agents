@@ -2,7 +2,6 @@ import asyncio
 import sqlite3
 import json
 import os
-import uuid
 from pathlib import Path
 from typing import List, Tuple
 import numpy as np
@@ -14,9 +13,17 @@ load_dotenv()
 # Initialize OpenAI client
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Global conversation history and thread ID
-conversation_history = []
-thread_id = str(uuid.uuid4())
+# Configuration
+thread_id = "default"
+
+# Conversation history store (use a database in production)
+thread_store: dict[str, list] = {}
+
+def get_thread_history(thread_id: str) -> list:
+    return thread_store.get(thread_id, [])
+
+def save_thread_history(thread_id: str, messages: list):
+    thread_store[thread_id] = messages
 
 # Knowledge base storage (loaded on startup)
 knowledge_base_docs: List[Tuple[str, str]] = []  # List of (filename, content) tuples
@@ -241,10 +248,13 @@ async def chat(question: str) -> str:
     db_path = str(Path(__file__).parent / 'inventory' / 'inventory.db')
     tools = [QUERY_DATABASE_TOOL, SEARCH_KNOWLEDGE_BASE_TOOL]
 
+    # Fetch conversation history
+    history_messages = get_thread_history(thread_id)
+
     # Build messages with conversation history
     messages = [
         {"role": "system", "content": system_prompt}
-    ] + conversation_history + [
+    ] + history_messages + [
         {"role": "user", "content": question}
     ]
 
@@ -318,9 +328,8 @@ async def chat(question: str) -> str:
         "content": final_content
     })
 
-    # Update conversation history
-    conversation_history.append({"role": "user", "content": question})
-    conversation_history.append({"role": "assistant", "content": final_content})
+    # Save conversation history (everything except system prompt)
+    save_thread_history(thread_id, messages[1:])
 
     return final_content
 
