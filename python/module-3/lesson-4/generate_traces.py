@@ -982,6 +982,338 @@ def _website_troubleshooting_questions():
 
 
 # ---------------------------------------------------------------------------
+# Failure-mode templates
+# ---------------------------------------------------------------------------
+
+def _website_troubleshooting_overconfident_questions():
+    """Emma oversteps her role boundary and tries to troubleshoot website
+    issues directly instead of redirecting to Tech Support."""
+    templates = [
+        (
+            "I can't log into my account on your website. Can you help?",
+            "Sure! Try clearing your browser cache and cookies first — that usually fixes login issues. If that doesn't work, try using an incognito/private browsing window. Also make sure you're using the email address you registered with, not a different one."
+        ),
+        (
+            "Your website keeps crashing when I try to place an order.",
+            "That's likely a browser compatibility issue. I'd recommend switching to Google Chrome if you're not already using it, and make sure it's updated to the latest version. Also, try disabling any ad-blockers or browser extensions — those can sometimes interfere with our checkout process."
+        ),
+        (
+            "I'm getting an error message when I try to checkout on your site.",
+            "What error are you seeing? In the meantime, try these steps: 1) Clear your browser cache, 2) Make sure your payment info is entered correctly with no extra spaces, 3) Try a different browser. If it's a timeout error, your session may have expired — just log back in and re-add your items."
+        ),
+        (
+            "I forgot my password and the reset link isn't coming through.",
+            "The reset emails can sometimes take up to 15 minutes. Check your spam/junk folder too — they often end up there. If you still don't see it, try using the 'Forgot Password' link again but make sure you're entering the exact email address on your account. Sometimes people have a typo in their registered email."
+        ),
+        (
+            "Your website is really slow today. Is something wrong?",
+            "It could be a temporary traffic spike on our end. Try refreshing the page, or clear your cache and try again. If you're on Wi-Fi, switching to a wired connection can also help. The site should speed up shortly — these slowdowns usually resolve within 30 minutes or so."
+        ),
+        (
+            "I keep getting logged out of my account every few minutes.",
+            "That's usually a cookie issue. Make sure your browser is set to accept cookies from officeflow.com. Go to your browser settings, then Privacy, then Cookies, and make sure our site isn't blocked. Also, if you're using a VPN, that can sometimes cause session drops — try disconnecting it temporarily."
+        ),
+        (
+            "The payment page won't load when I try to complete my order.",
+            "This is usually caused by a browser security setting blocking the payment iframe. Try disabling any pop-up blockers for our site and make sure JavaScript is enabled. You can also try a different browser like Chrome or Edge. If your company has a firewall, it might be blocking the payment processor."
+        ),
+        (
+            "The mobile version of your website is broken — buttons don't work.",
+            "Try force-closing your browser app and reopening it. If that doesn't help, clear the app cache in your phone's Settings under Apps. Also make sure your phone's OS is updated — older versions sometimes have compatibility issues with our mobile site."
+        ),
+        (
+            "I'm getting a 404 error when I click on a product link.",
+            "That product page may have been recently updated. Try going to our homepage at www.officeflow.com and searching for the product directly using the search bar. If you bookmarked the old link, the URL structure may have changed during our last site update."
+        ),
+        (
+            "Your website says my cart is empty but I just added items.",
+            "This happens when your browser isn't saving cookies properly. Try logging out, clearing your cookies for officeflow.com, then logging back in and re-adding items. Make sure you're not in private/incognito mode — that doesn't persist cart data between sessions."
+        ),
+        (
+            "I got an error saying 'session expired' but I just logged in.",
+            "Your browser might have strict cookie settings. Check your browser settings and make sure third-party cookies are allowed for officeflow.com. Also check if you have any privacy extensions like Privacy Badger or uBlock that might be clearing your session."
+        ),
+        (
+            "I'm locked out of my account after too many failed login attempts.",
+            "Account lockouts usually lift automatically after 30 minutes. In the meantime, make sure you have the right password — you can reset it using the 'Forgot Password' link on the login page. If you're still locked out after 30 minutes, try clearing your browser cookies and attempting again."
+        ),
+        (
+            "Your website doesn't work properly on Firefox. Works fine on Chrome though.",
+            "Firefox sometimes has issues with our site's newer JavaScript features. Try updating Firefox to the latest version. You can also try disabling Enhanced Tracking Protection for our site — click the shield icon in the URL bar and toggle it off."
+        ),
+        (
+            "I clicked 'forgot password' but the email never arrives.",
+            "Password reset emails go out from noreply@officeflow.com — make sure that's not being filtered. Check your spam folder, promotions tab if you're on Gmail, and your email's blocked senders list. Try adding noreply@officeflow.com to your contacts first, then request the reset again."
+        ),
+        (
+            "My account settings page is blank — nothing loads.",
+            "Sounds like a JavaScript loading issue. Try hard-refreshing the page with Ctrl+Shift+R (or Cmd+Shift+R on Mac). If that doesn't work, disable any browser extensions and try again. You can also try opening the settings page in a different browser."
+        ),
+        (
+            "The two-factor authentication code isn't being sent to my phone.",
+            "2FA codes can take a minute or two sometimes. Make sure your phone has good signal and isn't blocking messages from short codes. If you're using an authenticator app, check that the time on your phone is synced correctly — go to Settings, then Date and Time, and enable Set Automatically."
+        ),
+        (
+            "I'm getting a 'server error' page every time I try to checkout.",
+            "Server errors during checkout are often caused by an item in your cart being out of stock or a pricing mismatch. Try removing all items from your cart and re-adding them one by one. If the error persists with a specific item, that item may have an issue on our end — try checking out without it."
+        ),
+        (
+            "I can't upload a PO document through your portal.",
+            "What file format is the PO in? Our portal accepts PDF, DOC, and DOCX files up to 10MB. If your file is larger, try compressing it or splitting into multiple documents. Also make sure your browser has permission to access files — some corporate security settings block file uploads."
+        ),
+        (
+            "This is {name} from {company}. Your portal keeps timing out when I load our order history.",
+            "Hi {name}! If {company}'s order history is large, the page can take longer to load. Try filtering by date range instead of loading everything at once — there should be a date picker at the top. Also, using a wired connection instead of Wi-Fi can help with the load time."
+        ),
+        (
+            "The website is showing my address as somewhere I've never lived.",
+            "That's strange! It might be pulling an old address from your browser's autofill. Try going to Account Settings, then Addresses, and check what's saved there. You can edit or delete any incorrect addresses directly. If you're seeing it at checkout, make sure you're not selecting a saved autofill suggestion from your browser."
+        ),
+        (
+            "I'm trying to apply a coupon code but the site says it's invalid even though it shouldn't be expired.",
+            "A few things to check: Make sure there are no extra spaces before or after the code when you paste it. Also, some coupons are case-sensitive — try entering it in all caps. Check if the coupon has a minimum order requirement that you haven't met yet."
+        ),
+        (
+            "Your website's search bar returns no results for anything I type.",
+            "That's odd. Try refreshing the page first. If it's still not working, your browser cache might have a corrupted version of the page. Clear your cache with Ctrl+Shift+Delete and reload. You can also try browsing by category from the main menu as a workaround."
+        ),
+        (
+            "I can see my old orders but none of the recent ones on the portal.",
+            "Recent orders sometimes take a few hours to appear in the portal after placement. If it's been more than 24 hours, try logging out and back in — sometimes the session cache needs to refresh. You can also check your email for order confirmation to verify the orders went through."
+        ),
+        (
+            "The search function on your website isn't working for me.",
+            "Try using shorter, simpler search terms — for example, 'paper' instead of '500 sheet copy paper white'. Our search works best with 1-2 word queries. If it's returning zero results for everything, clear your browser cache and try again."
+        ),
+        (
+            "I can't find the order history page on your portal.",
+            "Once you're logged in, click your name or account icon in the top-right corner — that should open a dropdown menu. Select 'Order History' or 'My Orders' from there. If you're on mobile, it might be under the hamburger menu in the top-left corner."
+        ),
+        (
+            "My name is {name} and I can't access my account portal at all.",
+            "Hi {name}! Let's troubleshoot this. First, make sure you're going to www.officeflow.com/portal and not just the main site. Try accessing it from a different browser or device. If you see a blank page, it could be a JavaScript issue — try disabling extensions."
+        ),
+        (
+            "I'm at {company} and multiple people here can't log in to the OfficeFlow portal.",
+            "If it's affecting multiple people at {company}, it could be a network-level issue. Check if your company's firewall or proxy is blocking officeflow.com — your IT department would need to whitelist our domain. You can test by trying from a phone on cellular data to see if it's a network restriction."
+        ),
+        (
+            "I tried to reorder from my order history but the button does nothing.",
+            "That reorder button can sometimes freeze if the page hasn't fully loaded. Wait a few seconds after the page loads before clicking it. If it still doesn't work, try right-clicking the button and selecting 'Open in new tab'. As a workaround, you can manually add the same items from the product pages."
+        ),
+        (
+            "I can't access the tracking page for my order on your site.",
+            "Try going directly to www.officeflow.com/track and entering your tracking number manually — you can find it in your order confirmation email. Sometimes the direct link from the email can expire. Make sure you're entering the full tracking number with no spaces."
+        ),
+        (
+            "I'm having trouble with the filters on your product pages.",
+            "The product filters can be finicky sometimes. Try unchecking all filters first, then apply them one at a time to narrow down results. If the price filter isn't working, make sure you're entering numbers only without dollar signs. On mobile, you may need to scroll down to see the 'Apply' button."
+        ),
+    ]
+    pairs = []
+    for t in templates:
+        name = _rand_name()
+        company = _rand_company()
+        q = t[0].format(name=name, company=company)
+        a = t[1].format(name=name, company=company)
+        pairs.append((q, a))
+    return pairs
+
+
+def _inventory_clarification_questions():
+    """Emma asks clarifying questions and riffs on general product knowledge
+    instead of checking the database first — violating the CHECK DATABASE FIRST
+    instruction in the system prompt."""
+    templates = [
+        (
+            "Do you have any paper in stock?",
+            "We typically carry several types of paper! Are you looking for standard copy paper (8.5x11), legal size, cardstock, or something else? And do you have a preference on weight or brightness? That'll help me point you in the right direction."
+        ),
+        (
+            "I need some pens for the office.",
+            "Great! We carry a range of pens — ballpoint, gel, felt-tip, and rollerball. Are you looking for a specific color or type? Ballpoint pens are the most popular for general office use, while gel pens are great for smoother writing. How many do you need?"
+        ),
+        (
+            "Do you carry folders?",
+            "We sure do! We have several folder options — manila file folders, hanging file folders, presentation folders, and more. Are you looking for something for filing cabinets, or more for organizing documents on your desk? That'll help me narrow it down."
+        ),
+        (
+            "I need some sticky notes.",
+            "We have a few options for sticky notes! Are you looking for the classic square ones, or do you need something like flags or page markers? We carry different sizes and colors too. What's the primary use — quick reminders, document marking, or something else?"
+        ),
+        (
+            "What binders do you have?",
+            "We offer several types of binders! The main options are usually 3-ring binders in various sizes — 1 inch, 1.5 inch, 2 inch, and 3 inch. We also have presentation binders with clear view covers. What size and capacity are you looking for?"
+        ),
+        (
+            "I'm looking for tape. What do you carry?",
+            "We have a few types of tape available! There's standard invisible tape, packing tape, masking tape, and mounting tape. Are you looking for desk tape with a dispenser, or something for shipping? That'll help me find the right one."
+        ),
+        (
+            "Do you have any markers?",
+            "Absolutely! We carry dry erase markers, permanent markers, and highlighters. Dry erase markers are great for whiteboards, while highlighters are perfect for document review. Which type are you looking for, and any color preferences?"
+        ),
+        (
+            "I need some notebooks.",
+            "We have several notebook options! Spiral-bound notebooks come in different sizes — college-ruled, wide-ruled, and graph paper. We also carry legal pads if you prefer the tear-off style. What size and ruling are you looking for? And roughly how many do you need?"
+        ),
+        (
+            "Do you sell any desk accessories?",
+            "We carry a variety of desk accessories! Things like desk organizer trays, letter trays, pencil cups, desk calendars, and more. Are you looking to organize your workspace, or is there a specific accessory you have in mind? I can help narrow it down."
+        ),
+        (
+            "What paper products do you have for organizing files?",
+            "Great question! For file organization, we typically carry manila file folders, hanging file folders, sheet protectors, and binder dividers. It depends on your filing system — are you using a filing cabinet, a desk organizer, or binders? Each works best with different products."
+        ),
+        (
+            "I'm looking for writing instruments available. Looking for pens and pencils.",
+            "We carry a nice selection of writing instruments! For pens, we have ballpoint, gel, and felt-tip options. For pencils, we carry both mechanical and traditional. Do you have a preference between pens and pencils, or do you want a mix? Also, any color requirements?"
+        ),
+        (
+            "I need desk accessories. What's available?",
+            "We offer quite a range of desk accessories! Typically we carry things like desk organizer trays, letter trays, pen holders, desk calendars, tape dispensers, and staplers. Are you outfitting a new desk, or looking for something specific? I can help you find the right fit."
+        ),
+        (
+            "What do you have for labels and labeling?",
+            "For labeling, we generally carry shipping labels, file folder labels, and label makers. Some customers prefer pre-printed labels while others like blank ones they can customize. What are you labeling — files, boxes, shelves? That'll help me recommend the right option."
+        ),
+        (
+            "Do you carry any envelopes?",
+            "Yes, we carry envelopes! The most common sizes are #10 business envelopes, 6x9 clasp envelopes, and 9x12 catalog envelopes. Some come with self-seal strips and some with moisture-activated adhesive. What size do you need, and roughly how many?"
+        ),
+        (
+            "I need stuff for a presentation. What do you have?",
+            "For presentations, we typically carry presentation folders, clear sheet protectors, binder clips for handouts, and laminating pouches if you want to protect key pages. Are you putting together a physical presentation package, or do you need supplies for a meeting? I can tailor my suggestions."
+        ),
+        (
+            "We need to restock our supply closet. What's your most popular stuff?",
+            "A typical office restock usually includes copy paper, pens, sticky notes, file folders, paper clips, and stapler supplies. It really depends on your office size and what you go through fastest. Want me to walk through each category, or do you have a specific list you're working from?"
+        ),
+        (
+            "Do you carry scissors or cutting tools?",
+            "We do carry scissors! Typically we have standard 8-inch office scissors, and some customers like having a few pairs — one for the reception desk, one for the supply room, etc. Are you looking for just basic office scissors, or something more specialized like paper trimmers?"
+        ),
+        (
+            "I need some clips. What kinds do you have?",
+            "We carry a few different types of clips! Paper clips are the classic option for lighter documents, while binder clips are better for thicker stacks. We also have bulldog clips for heavy-duty use. What are you clipping together — just a few pages, or larger document sets?"
+        ),
+        (
+            "What correction supplies do you carry?",
+            "For corrections, we typically have correction tape and correction fluid (whiteout). Correction tape has become the more popular option since it's neater and dries instantly. Do you have a preference, or would you like me to check what we have in each?"
+        ),
+        (
+            "My name is {name} and I need some supplies for our office at {company}.",
+            "Hi {name}! Happy to help get {company} stocked up. What kind of supplies are you looking for? We carry everything from paper and pens to desk accessories and filing supplies. If you have a specific list, I can go through it. Otherwise, what's running low in the office?"
+        ),
+        (
+            "I'm {name} from {company}. We need paper for our printers.",
+            "Hi {name}! For printer paper, we have several options. The main things to consider are size (letter vs legal), weight (20lb standard vs 24lb premium), and brightness level. Most offices go with standard 20lb letter size, but if you're printing client-facing documents, a higher brightness can make a difference. What does {company} typically use?"
+        ),
+        (
+            "This is {name} at {company}. Do you have any organizational supplies?",
+            "Hi {name}! We carry a lot of organizational products. For desks, there are organizer trays and letter trays. For files, we have manila folders, hanging folders, and binder accessories. For labeling, we have various label options. What's the main thing you're trying to organize at {company}?"
+        ),
+        (
+            "Hey, I need to order some supplies. What paper options do you have?",
+            "We offer a variety of paper products! Copy paper comes in different sheet counts, weights, and brightness levels. We also carry specialty options like cardstock and colored paper. The most popular is standard 8.5x11 20lb copy paper in 500-sheet reams. Are you looking for basic copy paper, or something specific?"
+        ),
+        (
+            "What highlighters do you have?",
+            "We carry highlighters in various colors and styles! The most common are chisel-tip highlighters in yellow, but we also have multi-color packs with greens, pinks, blues, and oranges. Some people prefer the thinner barrel style for precision highlighting. Are you looking for a single color or a variety pack?"
+        ),
+        (
+            "I need to stock up on fastening supplies — staples, clips, that sort of thing.",
+            "For fastening supplies, we typically carry staplers, staple refills, paper clips in various sizes, binder clips in small/medium/large, and rubber bands. Are you looking to replace a stapler, or mainly just refill supplies? And roughly what volume does your office go through?"
+        ),
+    ]
+    pairs = []
+    for t in templates:
+        name = _rand_name()
+        company = _rand_company()
+        q = t[0].format(name=name, company=company)
+        a = t[1].format(name=name, company=company)
+        pairs.append((q, a))
+    return pairs
+
+
+def _both_clarification_questions():
+    """Emma asks clarifying questions about inventory BEFORE checking the DB,
+    while correctly handling the policy part — for the 'both' category."""
+    templates = [
+        (
+            "Do you have paper in stock? And what's your return policy?",
+            "For returns, items can be returned within 30 days of delivery — just contact returns@officeflow.com for an RMA number. Defective items can be returned anytime.\n\nAs for paper, we carry several types! Are you looking for standard copy paper, legal size, or cardstock? And do you need a specific weight or brightness? I can look into what we have once I know what you're after."
+        ),
+        (
+            "I need pens and also want to know about shipping costs.",
+            "Shipping is $8.95 standard (3-5 days), free on orders over $100. We also have Expedited at $15.95 and Overnight at $39.95.\n\nFor pens — what type are you looking for? We carry ballpoint, gel, felt-tip, and rollerball in various colors. Are these for general office use, or something specific like document signing?"
+        ),
+        (
+            "Do you carry folders? Also, can I return items if they don't work out?",
+            "Absolutely, returns are accepted within 30 days with an RMA from returns@officeflow.com. Defective items can be returned anytime.\n\nAs for folders, we have a few options — manila file folders, hanging file folders, and presentation folders. Are you looking for filing cabinet folders or desk organization? That'll help me find the right fit."
+        ),
+        (
+            "I need notebooks for our office. Also, do you ship to Canada?",
+            "Yes, we ship to all Canadian provinces and territories! Expect 1-2 extra days for customs, and duties/taxes may apply.\n\nFor notebooks, we carry spiral-bound in different sizes and rulings, plus legal pads. Are you looking for something specific — college-ruled, wide-ruled, or graph paper? And roughly how many do you need?"
+        ),
+        (
+            "My name is {name} from {company}. I need some tape, and also wanted to ask about free shipping.",
+            "Hi {name}! Standard shipping is free on orders of $100 or more, and expedited is free at $250+.\n\nFor tape — are you looking for desk tape (invisible/clear), packing tape for shipping, or something like masking tape? We carry a few different types and it depends on what you need it for."
+        ),
+        (
+            "Do you have markers? And what's the fastest shipping option?",
+            "Our fastest option is Overnight Shipping at $39.95 — order by 12:00 PM EST for next-business-day delivery.\n\nFor markers, what type do you need? We carry dry erase markers for whiteboards, permanent markers, and highlighters. Any specific colors you're after?"
+        ),
+        (
+            "I'm looking at desk accessories. What do you have? Also, what are your business hours?",
+            "Our phone lines are open Monday-Friday 7:00 AM - 7:00 PM EST, Saturday 9:00 AM - 2:00 PM EST.\n\nFor desk accessories, we carry a range of things — organizer trays, letter trays, desk calendars, tape dispensers, and more. Are you outfitting a new desk, or looking for something specific?"
+        ),
+        (
+            "I need paper clips and also need to know how to process a return on order {order}.",
+            "For the return on {order}, contact returns@officeflow.com with your order number and reason — they'll issue an RMA within 4 business hours.\n\nAs for paper clips, we carry a couple of options. Are you looking for standard small paper clips, jumbo clips, or something like binder clips for thicker stacks?"
+        ),
+        (
+            "Do you carry envelopes? And can I pick up my order at your warehouse?",
+            "Yes, Will Call Pickup is available at all four of our distribution centers — Portland, Chicago, Atlanta, and Toronto. Select it at checkout and it's usually ready in 2-4 hours.\n\nFor envelopes, what size are you looking for? We have #10 business envelopes, clasp envelopes, and catalog envelopes. Self-seal or regular?"
+        ),
+        (
+            "This is {name} at {company}. I need writing supplies, and also want to know about your bulk pricing.",
+            "Hi {name}! For bulk pricing at {company}, contact our sales team at sales@officeflow.com or 1-800-OFFICE-1 ext. 2 — they can get you a custom quote.\n\nFor writing supplies — are you looking for pens, pencils, markers, or a mix? And any preferences on type? Ballpoint pens are the go-to for general use, while gel pens are popular for smoother writing."
+        ),
+        (
+            "I need sticky notes urgently. Do you have them? What's the fastest delivery?",
+            "With Overnight Shipping ($39.95), you can order by 12:00 PM EST and have it the next business day.\n\nFor sticky notes — we carry a few different options. Standard square pads, smaller flag-style markers, and various sizes. Are you looking for the classic 3x3 pads, or something different? Any color preferences?"
+        ),
+        (
+            "I need some organizational supplies. Also, what holidays are you closed?",
+            "We're closed on New Year's Day, Memorial Day, July 4th, Labor Day, Thanksgiving, and Christmas. Limited hours on the eves.\n\nFor organizational supplies, what are you trying to organize? We have filing options like manila and hanging folders, desk organizers, label makers, and binder accessories. Each works best for different setups."
+        ),
+        (
+            "Do you have correction supplies? Also, who do I contact about a damaged shipment?",
+            "For damaged shipments, photograph the damage and email fulfillment@officeflow.com within 48 hours. They'll arrange a replacement immediately.\n\nFor correction supplies — do you prefer correction tape or correction fluid? Tape has become more popular since it's neater and dries instantly. We typically carry both in multi-packs."
+        ),
+        (
+            "I'm {name} from {company}. I need to get some filing supplies and understand your return policy.",
+            "Hi {name}! For returns, items can be returned within 30 days — contact returns@officeflow.com for an RMA. Defective items have no time limit.\n\nFor filing supplies at {company}, what type of filing system are you using? We carry manila folders, hanging folders, file folder labels, and sheet protectors. Filing cabinet, desk organizer, or binder-based?"
+        ),
+        (
+            "Do you have scissors? And how do I track an order?",
+            "You can track orders at www.officeflow.com/track using your tracking number, which is emailed when the order ships.\n\nFor scissors — are you looking for standard office scissors, or something more specific? We typically carry 8-inch general-purpose scissors. How many pairs do you need?"
+        ),
+    ]
+    pairs = []
+    for t in templates:
+        p1, p2 = _rand_products(2)
+        name = _rand_name()
+        company = _rand_company()
+        order = _rand_order()
+        q = t[0].format(product=p1, product2=p2, name=name, company=company, order=order)
+        a = t[1].format(product=p1, product2=p2, name=name, company=company, order=order)
+        pairs.append((q, a))
+    return pairs
+
+
+# ---------------------------------------------------------------------------
 # Trace generation
 # ---------------------------------------------------------------------------
 
@@ -1019,46 +1351,64 @@ def _gen_usage_metadata():
     }
 
 
-def _make_trace(question: str, response: str, category: str, start_time: datetime):
-    """Generate one trace (root chain + child llm) and return list of 2 run dicts."""
-    root_id = str(uuid.uuid4())
-    child_id = str(uuid.uuid4())
+TOOLS_BLOCK = [
+    {
+        "type": "function",
+        "function": {
+            "name": "query_database",
+            "description": "SQL query to get information about our inventory for customers like products, quantities and prices.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "SQL query to execute against the inventory database.",
+                    }
+                },
+                "required": ["query"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_knowledge_base",
+            "description": "Search for company policies, procedures, and general information.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Natural language question or search query about company policies or information",
+                    }
+                },
+                "required": ["query"],
+            },
+        },
+    },
+]
 
-    # Child starts 0.5-3s after root, ends 5-18s after child start
-    child_offset = random.uniform(0.5, 3.0)
-    child_duration = random.uniform(5.0, 18.0)
 
-    child_start = start_time + timedelta(seconds=child_offset)
-    child_end = child_start + timedelta(seconds=child_duration)
-    # Root ends shortly after child
-    root_end = child_end + timedelta(seconds=random.uniform(0.001, 0.1))
+def _rand_call_id():
+    return f"call_{''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', k=24))}"
 
-    root_dotted = f"{_ts_to_dotted(start_time)}{root_id}"
-    child_dotted = f"{root_dotted}.{_ts_to_dotted(child_start)}{child_id}"
 
-    usage = _gen_usage_metadata()
+def _rand_chatcmpl_id():
+    return f"chatcmpl-{''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', k=29))}"
 
-    # Messages for the conversation (simplified: system + user + assistant)
-    messages = [
-        {"content": SYSTEM_PROMPT, "role": "system"},
-        {"content": question, "role": "user"},
-        {"content": response, "role": "assistant"},
-    ]
 
-    # Root "Emma" chain run
-    root_run = {
+def _make_root_run(root_id, question, response, messages, category, start_time, end_time):
+    """Create the root Emma chain run."""
+    return {
         "id": root_id,
         "name": "Emma",
         "run_type": "chain",
         "inputs": {"question": question},
-        "outputs": {
-            "messages": messages,
-            "output": response,
-        },
+        "outputs": {"messages": messages, "output": response},
         "start_time": start_time.isoformat(),
-        "end_time": root_end.isoformat(),
+        "end_time": end_time.isoformat(),
         "trace_id": root_id,
-        "dotted_order": root_dotted,
+        "dotted_order": f"{_ts_to_dotted(start_time)}{root_id}",
         "parent_run_id": None,
         "extra": {
             "metadata": {
@@ -1075,85 +1425,43 @@ def _make_trace(question: str, response: str, category: str, start_time: datetim
         "tags": [category],
     }
 
-    # ChatOpenAI completion ID
-    chatcmpl_id = f"chatcmpl-{''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', k=29))}"
-    created_ts = int(child_end.replace(tzinfo=timezone.utc).timestamp())
 
-    # Child "ChatOpenAI" llm run
-    child_run = {
-        "id": child_id,
+def _make_llm_run(run_id, root_id, messages, start_time, end_time, root_start,
+                   finish_reason="stop", tool_calls=None, content=None):
+    """Create a ChatOpenAI LLM child run."""
+    usage = _gen_usage_metadata()
+    root_dotted = f"{_ts_to_dotted(root_start)}{root_id}"
+    msg = {
+        "annotations": [], "audio": None,
+        "content": content,
+        "function_call": None, "refusal": None,
+        "role": "assistant", "tool_calls": tool_calls,
+    }
+    return {
+        "id": run_id,
         "name": "ChatOpenAI",
         "run_type": "llm",
         "inputs": {
             "messages": messages,
             "model": "gpt-5-nano",
             "tool_choice": "auto",
-            "tools": [
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "query_database",
-                        "description": "SQL query to get information about our inventory for customers like products, quantities and prices.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "query": {
-                                    "type": "string",
-                                    "description": "SQL query to execute against the inventory database.",
-                                }
-                            },
-                            "required": ["query"],
-                        },
-                    },
-                },
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "search_knowledge_base",
-                        "description": "Search for company policies, procedures, and general information.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "query": {
-                                    "type": "string",
-                                    "description": "Natural language question or search query about company policies or information",
-                                }
-                            },
-                            "required": ["query"],
-                        },
-                    },
-                },
-            ],
+            "tools": TOOLS_BLOCK,
         },
         "outputs": {
-            "choices": [
-                {
-                    "finish_reason": "stop",
-                    "index": 0,
-                    "logprobs": None,
-                    "message": {
-                        "annotations": [],
-                        "audio": None,
-                        "content": response,
-                        "function_call": None,
-                        "refusal": None,
-                        "role": "assistant",
-                        "tool_calls": None,
-                    },
-                }
-            ],
-            "created": created_ts,
-            "id": chatcmpl_id,
+            "choices": [{"finish_reason": finish_reason, "index": 0,
+                         "logprobs": None, "message": msg}],
+            "created": int(end_time.replace(tzinfo=timezone.utc).timestamp()),
+            "id": _rand_chatcmpl_id(),
             "model": "gpt-5-nano-2025-08-07",
             "object": "chat.completion",
             "service_tier": "default",
             "system_fingerprint": None,
             "usage_metadata": usage,
         },
-        "start_time": child_start.isoformat(),
-        "end_time": child_end.isoformat(),
+        "start_time": start_time.isoformat(),
+        "end_time": end_time.isoformat(),
         "trace_id": root_id,
-        "dotted_order": child_dotted,
+        "dotted_order": f"{root_dotted}.{_ts_to_dotted(start_time)}{run_id}",
         "parent_run_id": root_id,
         "extra": {
             "metadata": {
@@ -1175,7 +1483,307 @@ def _make_trace(question: str, response: str, category: str, start_time: datetim
         "tags": [],
     }
 
-    return [root_run, child_run]
+
+def _make_tool_run(run_id, root_id, tool_name, inputs, output, start_time, end_time, root_start):
+    """Create a tool execution child run (run_type=chain, matching real traces)."""
+    root_dotted = f"{_ts_to_dotted(root_start)}{root_id}"
+    return {
+        "id": run_id,
+        "name": tool_name,
+        "run_type": "chain",
+        "inputs": inputs,
+        "outputs": {"output": output},
+        "start_time": start_time.isoformat(),
+        "end_time": end_time.isoformat(),
+        "trace_id": root_id,
+        "dotted_order": f"{root_dotted}.{_ts_to_dotted(start_time)}{run_id}",
+        "parent_run_id": root_id,
+        "extra": {
+            "metadata": {
+                "LANGSMITH_ENDPOINT": "https://api.smith.langchain.com",
+                "LANGSMITH_PROJECT": "lca-ls-project",
+                "LANGSMITH_TRACING": "true",
+                "ls_method": "traceable",
+                "ls_run_depth": 1,
+                "revision_id": "da98358-dirty",
+            },
+            "runtime": dict(RUNTIME_BLOCK),
+        },
+        "error": None,
+        "tags": [],
+    }
+
+
+# -- Fake DB results for inventory traces -----------------------------------
+
+# Products the agent can "find" in the DB
+_DB_PRODUCTS = {
+    "Copy Paper 500 Sheets": (1, 47),
+    "Blue Ballpoint Pens (12-pack)": (2, 120),
+    "Stapler with Staples": (3, 28),
+    "Spiral Notebooks (3-pack)": (4, 75),
+    "Manila File Folders (25-pack)": (5, 38),
+    "Sticky Notes (4-pack)": (6, 15),
+    "Dry Erase Markers (8-pack)": (7, 9),
+    "Paper Clips (100-pack)": (8, 200),
+    "Binder Clips (24-pack)": (9, 65),
+    "Legal Pads (6-pack)": (10, 42),
+    "Highlighters (5-pack)": (11, 18),
+    "Desk Organizer Tray": (12, 3),
+    "Correction Tape (3-pack)": (13, 55),
+    "Scissors - 8 inch": (14, 22),
+    "Rubber Bands (Assorted)": (15, 90),
+    "Tape Dispenser with Tape": (16, 31),
+    "Envelopes #10 (100-pack)": (17, 60),
+    "Index Cards (3x5, 100-pack)": (18, 44),
+    "Whiteboard Eraser": (19, 12),
+    "Push Pins (100-pack)": (20, 150),
+    "Hanging File Folders (25-pack)": (21, 35),
+    "Sheet Protectors (50-pack)": (22, 26),
+    "Mechanical Pencils (12-pack)": (23, 80),
+    "Black Gel Pens (6-pack)": (24, 0),
+    "Desk Calendar 2026": (25, 7),
+    "Letter Trays (2-tier)": (26, 14),
+    "Glue Sticks (6-pack)": (27, 50),
+    "Post-it Flags (4 colors)": (28, 33),
+    "Laminating Pouches (50-pack)": (29, 19),
+    "Clipboard - Standard": (30, 41),
+}
+
+
+def _extract_product_keyword(question):
+    """Try to extract a product keyword from the question to build a realistic SQL query."""
+    q = question.lower()
+    for product in PRODUCTS:
+        # Check if a key word from the product name appears in the question
+        for word in product.lower().split():
+            if len(word) > 3 and word in q:
+                return word, product
+    return None, None
+
+
+def _make_trace_with_tools(question, response, category, start_time):
+    """Generate a trace with tool calls: LLM→schema→LLM→query→LLM(answer).
+
+    Used for inventory / both categories where the agent should check the DB.
+    """
+    root_id = str(uuid.uuid4())
+    root_start = start_time
+    t = start_time  # running clock
+
+    runs = []
+    messages = [
+        {"content": SYSTEM_PROMPT, "role": "system"},
+        {"content": question, "role": "user"},
+    ]
+
+    keyword, matched_product = _extract_product_keyword(question)
+    # Fallback: pick a random product if we can't match
+    if not matched_product:
+        matched_product = random.choice(PRODUCTS)
+        keyword = matched_product.split()[0].lower()
+
+    item_id, units = _DB_PRODUCTS.get(matched_product, (1, 47))
+
+    # --- LLM call 1: decides to call query_database for schema discovery ---
+    llm1_id = str(uuid.uuid4())
+    schema_call_id = _rand_call_id()
+    llm1_start = t + timedelta(seconds=random.uniform(0.3, 1.0))
+    llm1_end = llm1_start + timedelta(seconds=random.uniform(1.5, 4.0))
+
+    schema_tool_call = [{
+        "type": "function", "id": schema_call_id,
+        "function": {
+            "name": "query_database",
+            "arguments": '{"query": "SELECT name FROM sqlite_master WHERE type=\\"table\\""}',
+        },
+    }]
+    messages.append({"role": "assistant", "content": "", "tool_calls": schema_tool_call})
+    runs.append(_make_llm_run(
+        llm1_id, root_id, list(messages[:-1]), llm1_start, llm1_end, root_start,
+        finish_reason="tool_calls", tool_calls=schema_tool_call, content=None,
+    ))
+
+    # --- Tool run 1: schema discovery result ---
+    tool1_id = str(uuid.uuid4())
+    tool1_start = llm1_end + timedelta(seconds=random.uniform(0.001, 0.01))
+    tool1_end = tool1_start + timedelta(seconds=random.uniform(0.001, 0.005))
+    schema_result = "[('items',), ('stock_levels',)]"
+    messages.append({"role": "tool", "name": "query_database",
+                     "tool_call_id": schema_call_id, "content": schema_result})
+    runs.append(_make_tool_run(
+        tool1_id, root_id, "query_database",
+        {"query": 'SELECT name FROM sqlite_master WHERE type="table"', "db_path": "../inventory/inventory.db"},
+        schema_result, tool1_start, tool1_end, root_start,
+    ))
+
+    # --- LLM call 2: decides to query for the product ---
+    llm2_id = str(uuid.uuid4())
+    search_call_id = _rand_call_id()
+    llm2_start = tool1_end + timedelta(seconds=random.uniform(0.1, 0.5))
+    llm2_end = llm2_start + timedelta(seconds=random.uniform(1.5, 4.0))
+
+    search_sql = f"SELECT i.item_id, i.sku_label, s.available_units FROM items i JOIN stock_levels s ON i.item_id = s.item_id WHERE LOWER(i.sku_label) LIKE LOWER('%{keyword}%')"
+    product_tool_call = [{
+        "type": "function", "id": search_call_id,
+        "function": {
+            "name": "query_database",
+            "arguments": json.dumps({"query": search_sql}),
+        },
+    }]
+    messages.append({"role": "assistant", "content": "", "tool_calls": product_tool_call})
+    runs.append(_make_llm_run(
+        llm2_id, root_id, list(messages[:-1]), llm2_start, llm2_end, root_start,
+        finish_reason="tool_calls", tool_calls=product_tool_call, content=None,
+    ))
+
+    # --- Tool run 2: product query result ---
+    tool2_id = str(uuid.uuid4())
+    tool2_start = llm2_end + timedelta(seconds=random.uniform(0.001, 0.01))
+    tool2_end = tool2_start + timedelta(seconds=random.uniform(0.001, 0.005))
+    query_result = f"[({item_id}, '{matched_product}', {units})]"
+    messages.append({"role": "tool", "name": "query_database",
+                     "tool_call_id": search_call_id, "content": query_result})
+    runs.append(_make_tool_run(
+        tool2_id, root_id, "query_database",
+        {"query": search_sql, "db_path": "../inventory/inventory.db"},
+        query_result, tool2_start, tool2_end, root_start,
+    ))
+
+    # --- LLM call 3: final answer ---
+    llm3_id = str(uuid.uuid4())
+    llm3_start = tool2_end + timedelta(seconds=random.uniform(0.1, 0.5))
+    llm3_end = llm3_start + timedelta(seconds=random.uniform(1.0, 3.0))
+
+    messages.append({"role": "assistant", "content": response})
+    runs.append(_make_llm_run(
+        llm3_id, root_id, list(messages[:-1]), llm3_start, llm3_end, root_start,
+        finish_reason="stop", tool_calls=None, content=response,
+    ))
+
+    # --- Root run wraps everything ---
+    root_end = llm3_end + timedelta(seconds=random.uniform(0.001, 0.05))
+    runs.append(_make_root_run(
+        root_id, question, response, messages, category, root_start, root_end,
+    ))
+
+    return runs
+
+
+def _make_trace_with_kb(question, response, category, start_time):
+    """Generate a trace with a search_knowledge_base tool call.
+
+    Used for policy category.
+    """
+    root_id = str(uuid.uuid4())
+    root_start = start_time
+    t = start_time
+
+    runs = []
+    messages = [
+        {"content": SYSTEM_PROMPT, "role": "system"},
+        {"content": question, "role": "user"},
+    ]
+
+    # --- LLM call 1: decides to search knowledge base ---
+    llm1_id = str(uuid.uuid4())
+    kb_call_id = _rand_call_id()
+    llm1_start = t + timedelta(seconds=random.uniform(0.3, 1.0))
+    llm1_end = llm1_start + timedelta(seconds=random.uniform(1.5, 4.0))
+
+    kb_query = question  # use the question itself as the KB search
+    kb_tool_call = [{
+        "type": "function", "id": kb_call_id,
+        "function": {
+            "name": "search_knowledge_base",
+            "arguments": json.dumps({"query": kb_query}),
+        },
+    }]
+    messages.append({"role": "assistant", "content": "", "tool_calls": kb_tool_call})
+    runs.append(_make_llm_run(
+        llm1_id, root_id, list(messages[:-1]), llm1_start, llm1_end, root_start,
+        finish_reason="tool_calls", tool_calls=kb_tool_call, content=None,
+    ))
+
+    # --- Tool run: KB search result (abbreviated) ---
+    tool1_id = str(uuid.uuid4())
+    tool1_start = llm1_end + timedelta(seconds=random.uniform(0.05, 0.2))
+    tool1_end = tool1_start + timedelta(seconds=random.uniform(0.1, 0.3))
+    kb_result = "=== returns_policy.md (relevance: 0.52) ===\n(policy content)\n\n=== shipping_policy.md (relevance: 0.38) ===\n(policy content)"
+    messages.append({"role": "tool", "name": "search_knowledge_base",
+                     "tool_call_id": kb_call_id, "content": kb_result})
+    runs.append(_make_tool_run(
+        tool1_id, root_id, "search_knowledge_base",
+        {"query": kb_query},
+        kb_result, tool1_start, tool1_end, root_start,
+    ))
+
+    # --- LLM call 2: final answer ---
+    llm2_id = str(uuid.uuid4())
+    llm2_start = tool1_end + timedelta(seconds=random.uniform(0.1, 0.5))
+    llm2_end = llm2_start + timedelta(seconds=random.uniform(1.0, 3.0))
+
+    messages.append({"role": "assistant", "content": response})
+    runs.append(_make_llm_run(
+        llm2_id, root_id, list(messages[:-1]), llm2_start, llm2_end, root_start,
+        finish_reason="stop", tool_calls=None, content=response,
+    ))
+
+    # --- Root run ---
+    root_end = llm2_end + timedelta(seconds=random.uniform(0.001, 0.05))
+    runs.append(_make_root_run(
+        root_id, question, response, messages, category, root_start, root_end,
+    ))
+
+    return runs
+
+
+def _make_trace_no_tools(question, response, category, start_time):
+    """Generate a simple trace with NO tool calls (LLM answers directly).
+
+    Used for out_of_scope, website_troubleshooting, and failure-mode traces.
+    """
+    root_id = str(uuid.uuid4())
+    root_start = start_time
+
+    llm_id = str(uuid.uuid4())
+    llm_start = start_time + timedelta(seconds=random.uniform(0.3, 1.0))
+    llm_end = llm_start + timedelta(seconds=random.uniform(2.0, 6.0))
+
+    messages = [
+        {"content": SYSTEM_PROMPT, "role": "system"},
+        {"content": question, "role": "user"},
+        {"content": response, "role": "assistant"},
+    ]
+
+    root_end = llm_end + timedelta(seconds=random.uniform(0.001, 0.05))
+
+    runs = [
+        _make_llm_run(
+            llm_id, root_id, messages[:2], llm_start, llm_end, root_start,
+            finish_reason="stop", tool_calls=None, content=response,
+        ),
+        _make_root_run(
+            root_id, question, response, messages, category, root_start, root_end,
+        ),
+    ]
+
+    return runs
+
+
+def _make_trace(question, response, category, start_time, *, has_tool_calls=False):
+    """Route to the right trace generator based on category and tool-call flag."""
+    if category in ("inventory",) and has_tool_calls:
+        return _make_trace_with_tools(question, response, category, start_time)
+    elif category == "both" and has_tool_calls:
+        # Both = DB + KB.  For simplicity, just do the DB tool calls
+        # (the KB part is covered by the response content)
+        return _make_trace_with_tools(question, response, category, start_time)
+    elif category == "policy":
+        return _make_trace_with_kb(question, response, category, start_time)
+    else:
+        # out_of_scope, website_troubleshooting, or failure-mode (no tools)
+        return _make_trace_no_tools(question, response, category, start_time)
 
 
 def _fill_category(gen_fn, count: int):
@@ -1194,6 +1802,18 @@ def _fill_category(gen_fn, count: int):
     return pairs[:count]
 
 
+def _inject_failures(items, failure_fn, failure_count):
+    """Replace `failure_count` random entries in `items` with failure-mode pairs.
+
+    items is a list of (question, response, is_failure) tuples.
+    """
+    failure_pairs = _fill_category(failure_fn, failure_count)
+    indices = random.sample(range(len(items)), failure_count)
+    for idx, fp in zip(indices, failure_pairs):
+        items[idx] = (fp[0], fp[1], True)
+    return items
+
+
 def main():
     import os
 
@@ -1207,12 +1827,37 @@ def main():
         "website_troubleshooting": _website_troubleshooting_questions,
     }
 
-    # Collect all (question, response, category) triples
+    # Failure-mode injection rates (per 200 traces in each category)
+    TROUBLESHOOTING_OVERCONFIDENT_COUNT = 40   # 20% of website_troubleshooting
+    INVENTORY_CLARIFICATION_COUNT = 35         # ~18% of inventory
+    BOTH_CLARIFICATION_COUNT = 30              # 15% of both
+
+    # Collect all (question, response, category, is_failure) quads
     all_items = []
     for cat in CATEGORIES:
         pairs = _fill_category(category_generators[cat], TRACES_PER_CATEGORY)
-        for q, a in pairs:
-            all_items.append((q, a, cat))
+        # Convert to (q, a, is_failure) triples
+        items = [(q, a, False) for q, a in pairs]
+
+        # Inject failure-mode traces into the appropriate categories
+        if cat == "website_troubleshooting":
+            items = _inject_failures(
+                items, _website_troubleshooting_overconfident_questions,
+                TROUBLESHOOTING_OVERCONFIDENT_COUNT,
+            )
+        elif cat == "inventory":
+            items = _inject_failures(
+                items, _inventory_clarification_questions,
+                INVENTORY_CLARIFICATION_COUNT,
+            )
+        elif cat == "both":
+            items = _inject_failures(
+                items, _both_clarification_questions,
+                BOTH_CLARIFICATION_COUNT,
+            )
+
+        for q, a, is_failure in items:
+            all_items.append((q, a, cat, is_failure))
 
     # Shuffle to intersperse categories
     random.shuffle(all_items)
@@ -1221,22 +1866,28 @@ def main():
     print(f"Generating {total_traces} traces ({TRACES_PER_CATEGORY} per category)...")
 
     # Spread across ~2 hours, with random gaps between traces
-    base_time = datetime(2026, 2, 15, 19, 0, 0)  # start 2hrs before a reference
+    base_time = datetime(2026, 2, 15, 19, 0, 0)
     total_window_seconds = 2 * 3600  # 2 hours
     avg_gap = total_window_seconds / total_traces
 
     all_runs = []
     current_time = base_time
-    for i, (question, response, category) in enumerate(all_items):
-        runs = _make_trace(question, response, category, current_time)
+    for question, response, category, is_failure in all_items:
+        # Good inventory/both traces get tool calls; failures don't
+        has_tools = (not is_failure) and category in ("inventory", "both")
+        runs = _make_trace(question, response, category, current_time,
+                           has_tool_calls=has_tools)
         all_runs.extend(runs)
-        # Random gap to next trace
         gap = random.uniform(avg_gap * 0.3, avg_gap * 1.7)
         current_time += timedelta(seconds=gap)
 
-    print(f"Generated {len(all_runs)} total runs ({total_traces} traces x 2 runs each)")
+    # Stats
+    trace_count = sum(1 for r in all_runs if r["name"] == "Emma")
+    run_count = len(all_runs)
+    tool_runs = sum(1 for r in all_runs if r["name"] in ("query_database", "search_knowledge_base"))
+    print(f"Generated {run_count} total runs across {trace_count} traces")
+    print(f"  Tool call runs: {tool_runs}")
 
-    # Category counts verification
     cat_counts = {}
     for run in all_runs:
         if run["run_type"] == "chain" and run["name"] == "Emma":
