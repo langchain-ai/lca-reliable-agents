@@ -8,19 +8,19 @@ from typing import List, Tuple
 import numpy as np
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
-from langsmith import traceable, Client
+from langsmith import traceable
 from langsmith.wrappers import wrap_openai
-import langsmith as ls
 
 load_dotenv()
 
 # Initialize clients
 client = wrap_openai(AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY")))
-langsmith_client = Client()
 
 # Configuration
-LANGSMITH_PROJECT = os.getenv("LANGSMITH_PROJECT", "lca-ls-project")
 thread_id = str(uuid.uuid4())
+
+# Using a local file to store thread history. For production use, use a persistent storage solution.
+THREAD_HISTORY_FILE = os.path.join(os.path.dirname(__file__), "thread_history.json")
 
 # Knowledge base storage (loaded on startup)
 knowledge_base_docs: List[Tuple[str, str]] = []  # List of (chunk_name, content) tuples
@@ -247,41 +247,26 @@ SEARCH_KNOWLEDGE_BASE_TOOL = {
     }
 }
 
-def get_thread_history(thread_id: str, project_name: str):
-    """Gets conversation history from LangSmith traces."""
-    # Filter runs by the specific thread and project
-    filter_string = f'and(in(metadata_key, ["session_id","conversation_id","thread_id"]), eq(metadata_value, "{thread_id}"))'
-    # Only grab the LLM runs
-    runs = [r for r in langsmith_client.list_runs(project_name=project_name, filter=filter_string, run_type="llm")]
-
-    # If no history exists, return empty list (new conversation)
-    if not runs:
+def get_thread_history() -> list:
+    """Gets conversation history from local storage."""
+    if not os.path.exists(THREAD_HISTORY_FILE):
         return []
+    with open(THREAD_HISTORY_FILE, "r") as f:
+        return json.load(f)
 
-    # Sort by start time to get the most recent interaction
-    runs = sorted(runs, key=lambda run: run.start_time, reverse=True)
+def save_thread_history(messages: list):
+    """Saves conversation history to local storage."""
+    with open(THREAD_HISTORY_FILE, "w") as f:
+        json.dump(messages, f, indent=2, default=str)
 
-    # Reconstruct the conversation state from the latest run
-    latest_run = runs[0]
-    messages = latest_run.inputs.get('messages', [])
-
-    # Add the assistant's response from outputs
-    if latest_run.outputs and 'choices' in latest_run.outputs:
-        assistant_message = latest_run.outputs['choices'][0]['message']
-        return messages + [assistant_message]
-
-    return messages
-
-@traceable(name="Emma")
+@traceable(name="Emma", metadata={"thread_id": thread_id})
 async def chat(question: str) -> str:
     """Process a user question and return assistant response."""
     db_path = str(Path(__file__).parent / 'inventory' / 'inventory.db')
     tools = [QUERY_DATABASE_TOOL, SEARCH_KNOWLEDGE_BASE_TOOL]
 
-    # Fetch conversation history from LangSmith traces
-    run_tree = ls.get_current_run_tree()
-    current_thread_id = run_tree.metadata.get("thread_id", thread_id)
-    history_messages = get_thread_history(current_thread_id, LANGSMITH_PROJECT)
+    # Fetch conversation history from local storage
+    history_messages = get_thread_history()
 
     # Build messages with history
     messages = [
@@ -360,9 +345,16 @@ async def chat(question: str) -> str:
         "content": final_content
     })
 
+    # Save conversation history (everything except system prompt)
+    save_thread_history(messages[1:])
+
     return {"messages": messages, "output": final_content}
 
 async def main():
+    # Clear history from previous runs
+    if os.path.exists(THREAD_HISTORY_FILE):
+        os.remove(THREAD_HISTORY_FILE)
+
     print("Office Supplies Support Chat")
     print("=" * 50)
     print(f"Thread ID: {thread_id}")

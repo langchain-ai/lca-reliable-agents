@@ -1,55 +1,36 @@
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+import json
 import uuid
-from langsmith import traceable, Client
-import langsmith as ls
+from langsmith import traceable
 from langsmith.wrappers import wrap_openai
 
 load_dotenv()
 
 # Initialize clients
 client = wrap_openai(OpenAI())
-langsmith_client = Client()
 
 # Configuration
-LANGSMITH_PROJECT = os.getenv("LANGSMITH_PROJECT")
 THREAD_ID = str(uuid.uuid4())
-langsmith_extra = {
-    "project_name": LANGSMITH_PROJECT,
-    "metadata": {"session_id": THREAD_ID}
-}
 
-# gets a history of all LLM calls in the thread to construct conversation history
-def get_thread_history(thread_id: str, project_name: str):
-    # Filter runs by the specific thread and project
-    filter_string = f'and(in(metadata_key, ["session_id","conversation_id","thread_id"]), eq(metadata_value, "{thread_id}"))'
-    # Only grab the LLM runs
-    runs = [r for r in langsmith_client.list_runs(
-        project_name=project_name,
-        filter=filter_string,
-        run_type="llm"
-    )]
+# Using a local file to store thread history. For production use, use a persistent storage solution.
+THREAD_HISTORY_FILE = os.path.join(os.path.dirname(__file__), "thread_history.json")
 
-    # If no history exists, return empty list (new conversation)
-    if not runs:
+def get_thread_history() -> list:
+    if not os.path.exists(THREAD_HISTORY_FILE):
         return []
+    with open(THREAD_HISTORY_FILE, "r") as f:
+        return json.load(f)
 
-    # Sort by start time to get the most recent interaction
-    runs = sorted(runs, key=lambda run: run.start_time, reverse=True)
+def save_thread_history(messages: list):
+    with open(THREAD_HISTORY_FILE, "w") as f:
+        json.dump(messages, f, indent=2, default=str)
 
-    # Reconstruct the conversation state
-    latest_run = runs[0]
-    return latest_run.inputs['messages'] + [latest_run.outputs['choices'][0]['message']]
-
-@traceable(name="Name Agent")
+@traceable(name="Name Agent", metadata={"thread_id": THREAD_ID})
 def chat_pipeline(messages: list):
     # Automatically fetch history if it exists
-    run_tree = ls.get_current_run_tree()
-    history_messages = get_thread_history(
-        run_tree.extra["metadata"]["session_id"],
-        run_tree.session_name
-    )
+    history_messages = get_thread_history()
 
     # Combine history with new messages
     all_messages = history_messages + messages
@@ -62,17 +43,24 @@ def chat_pipeline(messages: list):
 
     # Return the complete conversation including input and response
     response_message = chat_completion.choices[0].message
+    full_conversation = all_messages + [{"role": response_message.role, "content": response_message.content}]
+    save_thread_history(full_conversation)
+
     return {
-        "messages": all_messages + [response_message]
+        "messages": full_conversation
     }
 
 if __name__ == "__main__":
+    # Clear history from previous runs
+    if os.path.exists(THREAD_HISTORY_FILE):
+        os.remove(THREAD_HISTORY_FILE)
+
     # First message
     messages = [{"content": "Hi, my name is Sally", "role": "user"}]
-    result = chat_pipeline(messages, langsmith_extra=langsmith_extra)
+    result = chat_pipeline(messages)
     print(result["messages"][-1])
 
     # Follow up message - agent should remember the name
     messages = [{"content": "What's my name?", "role": "user"}]
-    result = chat_pipeline(messages, langsmith_extra=langsmith_extra)
+    result = chat_pipeline(messages)
     print(result["messages"][-1])
