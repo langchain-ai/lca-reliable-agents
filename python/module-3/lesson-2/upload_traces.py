@@ -24,7 +24,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--project", default="lca-ls-project-copy", help="Target project name")
+    parser.add_argument("--project", default="default", help="Target project name")
     parser.add_argument("--input", default="traces.json", help="Input file path")
     args = parser.parse_args()
 
