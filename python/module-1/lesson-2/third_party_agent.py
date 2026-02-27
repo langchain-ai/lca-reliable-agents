@@ -7,7 +7,7 @@ load_dotenv()
 
 client = wrap_openai(OpenAI())
 
-@traceable
+@traceable(run_type="tool")
 def weather_retriever():
     """Retrieve current weather information."""
     return "It is sunny today"
