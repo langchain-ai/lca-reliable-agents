@@ -1,55 +1,76 @@
-import json
-from langsmith.schemas import Run, Example
+"""
+Evaluator: Schema-Before-Query Check
+
+Checks that whenever the agent uses query_database, it first inspects
+the database schema (via PRAGMA table_info or sqlite_master) before
+running a data query. This ensures the agent doesn't blindly guess
+column names.
+"""
+import re
 
 
-def sql_starts_with_schema_check(run: Run, example: Example) -> dict:
-    """Check that the first SQL query starts by discovering the DB schema.
+SCHEMA_PATTERNS = [
+    r"PRAGMA\s+table_info",
+    r"SELECT\s+.*FROM\s+sqlite_master",
+    r"PRAGMA\s+database_list",
+    r"\.schema",
+]
 
-    Only applies to examples where expected_tools includes 'query_database'.
-    The first SQL tool call should be a schema discovery query
-    (e.g. SELECT name FROM sqlite_master) before any data queries.
-    """
-    expected_tools = example.metadata.get("expected_tools", "")
 
-    # Only evaluate examples that expect a database query
-    if "query_database" not in expected_tools:
-        return {
-            "key": "sql_starts_with_schema_check",
-            "score": None,
-            "comment": f"Not applicable — expected_tools is '{expected_tools}'.",
-        }
+def _is_schema_query(sql: str) -> bool:
+    """Return True if the SQL is a schema-inspection query."""
+    for pattern in SCHEMA_PATTERNS:
+        if re.search(pattern, sql, re.IGNORECASE):
+            return True
+    return False
 
-    messages = run.outputs.get("messages", [])
 
-    # Collect all query_database calls in order
-    sql_queries = []
+def _extract_tool_calls(run) -> list[dict]:
+    """Extract tool calls from run output messages."""
+    run_outputs = run.outputs if hasattr(run, "outputs") else run.get("outputs", {}) or {}
+    messages = run_outputs.get("messages", [])
+
+    tool_calls = []
     for msg in messages:
-        if msg.get("role") != "assistant":
-            continue
-        for tc in msg.get("tool_calls", []):
-            fn = tc.get("function", {})
-            if fn.get("name") == "query_database":
-                try:
-                    args = json.loads(fn["arguments"])
-                    sql_queries.append(args.get("query", ""))
-                except (json.JSONDecodeError, KeyError):
-                    continue
+        if isinstance(msg, dict):
+            for tc in msg.get("tool_calls", []):
+                func = tc.get("function", {})
+                tool_calls.append({
+                    "name": func.get("name", ""),
+                    "arguments": func.get("arguments", ""),
+                })
+    return tool_calls
 
-    if not sql_queries:
-        return {
-            "key": "sql_starts_with_schema_check",
-            "score": 0,
-            "comment": "Expected query_database but no SQL queries were made.",
-        }
 
-    first_query = sql_queries[0].strip().lower()
-    is_schema_check = "sqlite_master" in first_query or "pragma table_info" in first_query
+def schema_before_query(run, example) -> dict:
+    """Score 1 if the agent checks DB schema before querying data, 0 otherwise.
 
-    return {
-        "key": "sql_starts_with_schema_check",
-        "score": 1 if is_schema_check else 0,
-        "comment": (
-            f"First SQL query: {sql_queries[0]!r} — "
-            + ("starts with schema discovery." if is_schema_check else "does NOT start with schema discovery.")
-        ),
-    }
+    If the agent never calls query_database, scores 1 (not applicable).
+    """
+    tool_calls = _extract_tool_calls(run)
+
+    db_calls = [tc for tc in tool_calls if tc["name"] == "query_database"]
+
+    # No database calls — nothing to check
+    if not db_calls:
+        return {"score": 1, "comment": "No query_database calls — schema check not applicable"}
+
+    # Check if any schema query appears before the first non-schema data query
+    seen_schema_check = False
+    for tc in db_calls:
+        sql = tc.get("arguments", "")
+        if _is_schema_query(sql):
+            seen_schema_check = True
+        else:
+            # First real data query — was there a schema check before it?
+            if not seen_schema_check:
+                return {
+                    "score": 0,
+                    "comment": f"Agent queried data without checking schema first. First query: {sql[:200]}",
+                }
+            break  # Schema was checked before first data query — pass
+
+    if seen_schema_check:
+        return {"score": 1, "comment": "Agent checked schema before querying data"}
+
+    return {"score": 1, "comment": "All query_database calls were schema inspections"}

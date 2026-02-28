@@ -1,4 +1,7 @@
+from dotenv import load_dotenv
 from langsmith import evaluate
+
+load_dotenv()
 
 
 # Dummy "app" that always returns a response mentioning OfficeFlow

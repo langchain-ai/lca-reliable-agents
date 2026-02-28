@@ -15,12 +15,12 @@ DATASET_NAME = "officeflow-dataset"
 async def chat_wrapper_v4(inputs: dict) -> dict:
     question = inputs.get("question", "")
     result = await chat_v4(question)
-    return {"answer": result}
+    return {"answer": result["output"]}
 
 async def chat_wrapper_v5(inputs: dict) -> dict:
     question = inputs.get("question", "")
     result = await chat_v5(question)
-    return {"answer": result}
+    return {"answer": result["output"]}
 
 async def main():
     # Load knowledge bases for both agents

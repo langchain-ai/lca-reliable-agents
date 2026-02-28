@@ -82,7 +82,9 @@ def agent(question: str) -> str:
         )
         response_message = response.choices[0].message
 
-    return response_message.content
+    messages.append({"role": "assistant", "content": response_message.content})
+    return {"messages": messages, "output": response_message.content}
 
 if __name__ == "__main__":
-    print(agent("What is the weather today?"))
+    result = agent("What is the weather today?")
+    print(result["output"])

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import type { EvaluationResult } from "langsmith/evaluation";
 import { evaluate } from "langsmith/evaluation";
 

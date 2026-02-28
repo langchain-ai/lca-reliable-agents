@@ -1,36 +1,43 @@
+"""
+Run the schema-before-query evaluator against the officeflow-dataset.
+
+Usage:
+    uv run --env-file ../../.env python run_eval.py
+"""
 import asyncio
 import sys
 from pathlib import Path
-from langsmith import aevaluate
 
-# Add the agent directory to the path
-agent_dir = Path(__file__).resolve().parent.parent.parent / "officeflow-agent"
-sys.path.insert(0, str(agent_dir))
+from langsmith import evaluate
+from langsmith import uuid7
 
-from agent_v4 import chat, load_knowledge_base
-from eval_schema_check import sql_starts_with_schema_check
+# Add the agent directory to path
+agent_dir = str(Path(__file__).resolve().parent.parent.parent / "officeflow-agent")
+sys.path.insert(0, agent_dir)
 
-DATASET_NAME = "officeflow-dataset"
-EXPERIMENT_PREFIX = "schema-check-eval"
-
-
-async def target(inputs: dict) -> dict:
-    return await chat(inputs["question"])
+import agent_v5
+from agent_v5 import chat, load_knowledge_base
+from eval_schema_check import schema_before_query
 
 
-async def main():
-    # Load knowledge base before running evals
-    await load_knowledge_base(str(agent_dir / "knowledge_base"))
+async def setup():
+    """Load knowledge base before running evals."""
+    kb_dir = str(Path(agent_dir) / "knowledge_base")
+    await load_knowledge_base(kb_dir)
 
-    results = await aevaluate(
-        target,
-        data=DATASET_NAME,
-        evaluators=[sql_starts_with_schema_check],
-        experiment_prefix=EXPERIMENT_PREFIX,
-        max_concurrency=2,
-    )
-    print("Evaluation complete! View results at the link above.")
+
+def run_agent(inputs: dict) -> dict:
+    """Invoke the agent with a fresh thread_id each time."""
+    agent_v5.thread_id = str(uuid7())
+    return asyncio.run(chat(inputs["question"]))
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(setup())
+
+    results = evaluate(
+        run_agent,
+        data="officeflow-dataset",
+        evaluators=[schema_before_query],
+        experiment_prefix="schema-check-v5",
+    )
