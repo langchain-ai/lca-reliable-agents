@@ -1,3 +1,13 @@
+"""
+Pairwise conciseness evaluator for comparing two experiments.
+
+Run this AFTER run_agents.py, using the experiment names it outputs.
+
+Usage:
+    uv run python eval_conciseness_pairwise.py <experiment-a> <experiment-b>
+    uv run python eval_conciseness_pairwise.py agent-v4-3e016f9c agent-v5-7d7ee287
+"""
+
 from openai import OpenAI
 from langsmith import evaluate
 
@@ -48,8 +58,14 @@ def conciseness_evaluator(inputs: dict, outputs: list[dict]) -> list[int]:
 
 
 if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 3:
+        print("Usage: python eval_conciseness_pairwise.py <experiment-a> <experiment-b>")
+        print("Example: python eval_conciseness_pairwise.py agent-v4-3e016f9c agent-v5-7d7ee287")
+        sys.exit(1)
+
     evaluate(
-        ("agent-v4-experiment", "agent-v5-experiment"),
+        (sys.argv[1], sys.argv[2]),
         evaluators=[conciseness_evaluator],
         randomize_order=True,
     )
