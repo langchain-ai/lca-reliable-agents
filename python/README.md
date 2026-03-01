@@ -15,8 +15,6 @@ Welcome to LangChain Academy's **Building Reliable Agents** course!
 - A package/project manager: [uv](https://docs.astral.sh/uv/) (recommended) or [pip](https://pypi.org/project/pip/)
 
 
-### Installation
-
 Download the course repository
 ```bash
 # Clone the repo
@@ -130,6 +128,15 @@ python module-2/lesson-3/run_experiment.py
 
 </details>
 
+### If you are using coding agents in the course
+
+You can provide your agent access to the LangSmith Documents. The instructions are [here](https://docs.langchain.com/use-these-docs).
+
+There is also a growing library of 'skills' you can add to your coding agent. These are available via:
+```bash
+npx skills add langchain-ai/langchain-skills
+```
+> Note: This requires [Node.js](https://nodejs.org/) to be installed.
 
 ## Lessons
 
