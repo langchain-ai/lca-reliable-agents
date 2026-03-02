@@ -1,16 +1,20 @@
 import asyncio
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+
+agent_dir = Path(__file__).resolve().parent.parent.parent / "officeflow-agent"
+sys.path.insert(0, str(agent_dir))
+
 from langsmith import aevaluate, evaluate
-from officeflow_agent.agent_v4 import chat as chat_v4, load_knowledge_base as load_kb_v4
-from officeflow_agent.agent_v5 import chat as chat_v5, load_knowledge_base as load_kb_v5
+from agent_v4 import chat as chat_v4, load_knowledge_base as load_kb_v4
+from agent_v5 import chat as chat_v5, load_knowledge_base as load_kb_v5
 from eval_conciseness_pairwise import conciseness_evaluator
 from dotenv import load_dotenv
 
 load_dotenv()
 
 DATASET_NAME = "officeflow-dataset"
+KB_DIR = str(agent_dir / "knowledge_base")
 
 async def chat_wrapper_v4(inputs: dict) -> dict:
     question = inputs.get("question", "")
@@ -25,8 +29,8 @@ async def chat_wrapper_v5(inputs: dict) -> dict:
 async def main():
     # Load knowledge bases for both agents
     print("Loading knowledge bases...")
-    await load_kb_v4()
-    await load_kb_v5()
+    await load_kb_v4(KB_DIR)
+    await load_kb_v5(KB_DIR)
 
     # Step 1: Run experiment for agent v4
     print("\n" + "="*50)
