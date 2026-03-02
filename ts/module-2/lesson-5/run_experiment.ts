@@ -1,8 +1,10 @@
 import "dotenv/config";
+
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
 import { evaluate } from "langsmith/evaluation";
 import { chat, loadKnowledgeBase } from "../../officeflow-agent/agent_v4.js";
-import { fileURLToPath } from "url";
-import * as path from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

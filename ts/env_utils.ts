@@ -3,13 +3,12 @@
 // packages loaded, node installed and api keys available
 // it references the package.json file and example.env for requirements
 
-import * as fs from "fs";
-import * as path from "path";
-import { execSync } from "child_process";
-import { fileURLToPath } from "url";
+import fs from "node:fs";
+import path from "node:path";
+import { execSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // ========== NODE ENVIRONMENT DIAGNOSTICS ==========
 function checkNodeExecutableAndVersion(): {
@@ -140,7 +139,7 @@ function checkEnvFileExists(
   const found: Record<string, string> = {};
   const missing: string[] = [];
 
-  for (const [key, exampleVal] of Object.entries(requiredKeys)) {
+  for (const [key] of Object.entries(requiredKeys)) {
     const sysVal = process.env[key];
     if (sysVal !== undefined) {
       if (sysVal.includes("your_") || sysVal.includes("_here")) {
@@ -499,7 +498,7 @@ function doublecheckPkgs(
 // ========== MAIN ==========
 
 // Run diagnostics
-const { success } = checkNodeExecutableAndVersion();
+checkNodeExecutableAndVersion();
 
 // Check manual installs
 checkManualInstalls("example.env");

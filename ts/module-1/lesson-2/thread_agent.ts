@@ -22,7 +22,7 @@ function saveThreadHistory(threadId: string, messages: any[]): void {
 }
 
 const chatPipeline = traceable(
-  async (messages: any[]) => {
+  async (messages: OpenAI.ChatCompletionMessageParam[]) => {
     // Automatically fetch history if it exists
     const historyMessages = getThreadHistory(THREAD_ID);
 

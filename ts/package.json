@@ -10,7 +10,7 @@
     "@anthropic-ai/sdk": "^0.39.0",
     "better-sqlite3": "^11.0.0",
     "dotenv": "^16.4.0",
-    "langsmith": "^0.3.0",
+    "langsmith": "^0.5.7",
     "openai": "^4.80.0"
   },
   "devDependencies": {

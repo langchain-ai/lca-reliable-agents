@@ -6,7 +6,7 @@
  * running a data query. This ensures the agent doesn't blindly guess
  * column names.
  */
-import type { Run, Example } from "langsmith/schemas";
+import type { Run } from "langsmith/schemas";
 
 const SCHEMA_PATTERNS = [
   /PRAGMA\s+table_info/i,
@@ -47,7 +47,6 @@ function extractToolCalls(run: Run): ToolCall[] {
 
 export function schemaBeforeQuery(
   run: Run,
-  example?: Example
 ): { key: string; score: number; comment: string } {
   /**
    * Score 1 if the agent checks DB schema before querying data, 0 otherwise.
