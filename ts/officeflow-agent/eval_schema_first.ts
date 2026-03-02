@@ -7,7 +7,7 @@ interface Run {
   outputs?: RunOutputs;
 }
 
-export function schemaFirstEvaluator(run: Run, example: any): { score: number | null; comment: string } {
+export function schemaFirstEvaluator(run: Run): { score: number | null; comment: string } {
   const runOutputs: RunOutputs = (run as any).outputs ?? (run as any)?.get?.("outputs") ?? {};
   const messages: any[] = runOutputs.messages ?? [];
 

@@ -11,10 +11,10 @@
  * Each trace = 2 runs: root "Emma" chain + child "ChatOpenAI" llm.
  */
 
-import * as fs from "fs";
-import * as path from "path";
-import { fileURLToPath } from "url";
-import { randomUUID } from "crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { randomUUID } from "node:crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1827,7 +1827,7 @@ function _makeTraceWithTools(
     _makeLlmRun(
       llm1Id,
       rootId,
-      [...messages.slice(0, -1)],
+      messages.slice(0, -1),
       llm1Start,
       llm1End,
       rootStart,
@@ -1890,7 +1890,7 @@ function _makeTraceWithTools(
     _makeLlmRun(
       llm2Id,
       rootId,
-      [...messages.slice(0, -1)],
+      messages.slice(0, -1),
       llm2Start,
       llm2End,
       rootStart,
@@ -1934,7 +1934,7 @@ function _makeTraceWithTools(
     _makeLlmRun(
       llm3Id,
       rootId,
-      [...messages.slice(0, -1)],
+      messages.slice(0, -1),
       llm3Start,
       llm3End,
       rootStart,
@@ -1995,7 +1995,7 @@ function _makeTraceWithKb(
     _makeLlmRun(
       llm1Id,
       rootId,
-      [...messages.slice(0, -1)],
+      messages.slice(0, -1),
       llm1Start,
       llm1End,
       rootStart,
@@ -2040,7 +2040,7 @@ function _makeTraceWithKb(
     _makeLlmRun(
       llm2Id,
       rootId,
-      [...messages.slice(0, -1)],
+      messages.slice(0, -1),
       llm2Start,
       llm2End,
       rootStart,

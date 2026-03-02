@@ -1,10 +1,11 @@
+import fs from "node:fs";
+import path from "node:path";
+import readline from "node:readline";
+import { fileURLToPath } from "node:url";
+
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import Database from "better-sqlite3";
-import * as fs from "fs";
-import * as path from "path";
-import * as readline from "readline";
-import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -191,7 +192,7 @@ async function loadKnowledgeBase(
 
   console.log(`Generating embeddings for ${chunks.length} chunks...`);
   const embeddings: number[][] = [];
-  for (const [chunkName, content] of chunks) {
+  for (const [, content] of chunks) {
     const response = await client.embeddings.create({
       model: "text-embedding-3-small",
       input: content,

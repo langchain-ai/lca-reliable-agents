@@ -1,11 +1,12 @@
 /**
  * Pre-generate embeddings for the knowledge base to speed up agent startup.
  */
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
+
 import dotenv from "dotenv";
 import OpenAI from "openai";
-import * as path from "path";
-import * as fs from "fs";
-import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

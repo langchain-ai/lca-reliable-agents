@@ -3,7 +3,7 @@ import type { EvaluationResult } from "langsmith/evaluation";
 import { evaluate } from "langsmith/evaluation";
 
 // Dummy "app" that always returns a response mentioning OfficeFlow
-const dummyApp = async (inputs: Record<string, any>): Promise<Record<string, any>> => {
+const dummyApp = async (): Promise<Record<string, any>> => {
   return { response: "Sure! In OfficeFlow, you can reset your password from the settings page." };
 }
 

@@ -5,12 +5,15 @@
  *    npx tsx run_eval.ts
  */
 import "dotenv/config";
+
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
 import { evaluate } from "langsmith/evaluation";
 import { uuid7 } from "langsmith";
+
 import { chat, loadKnowledgeBase, setThreadId } from "../../officeflow-agent/agent_v5.js";
 import { schemaBeforeQuery } from "./eval_schema_check.js";
-import { fileURLToPath } from "url";
-import * as path from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,3 +38,5 @@ const results = await evaluate(runAgent, {
   evaluators: [schemaBeforeQuery],
   experimentPrefix: "schema-check-v5",
 });
+
+console.log(results);

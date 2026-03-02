@@ -61,7 +61,7 @@ const agent = traceable(
       // Execute the tool call(s)
       for (const toolCall of responseMessage.tool_calls) {
         if (toolCall.function.name === "weather_retriever") {
-          const result = await weatherRetriever();
+          const result = await weatherRetriever() as string;
 
           // Add tool result to messages
           messages.push({
@@ -83,12 +83,12 @@ const agent = traceable(
     }
 
     messages.push({ role: "assistant", content: responseMessage.content || "" });
-    return { messages, output: responseMessage.content };
+    return responseMessage.content;
   },
   { name: "agent" }
 );
 
 (async () => {
   const result = await agent("What is the weather today?");
-  console.log(result.output);
+  console.log(result);
 })();
