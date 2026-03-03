@@ -14,6 +14,7 @@ Welcome to LangChain Academy's **Building Reliable Agents** course!
 - Ensure you're using Python >=3.12, <=3.13 [More info](#python-virtual-environments)
 - A package/project manager: [uv](https://docs.astral.sh/uv/) (recommended) or [pip](https://pypi.org/project/pip/)
 
+### Installation
 
 Download the course repository
 ```bash
@@ -132,34 +133,32 @@ python module-2/lesson-3/run_experiment.py
 
 You can provide your agent access to the LangSmith Documents. The instructions are [here](https://docs.langchain.com/use-these-docs).
 
-There is also a growing library of 'skills' you can add to your coding agent. These are available via:
-```bash
-npx skills add langchain-ai/langchain-skills
-```
-> Note: This requires [Node.js](https://nodejs.org/) to be installed.
 
 ## Lessons
 
-### OfficeFlow Agent (`officeflow-agent/`)
+### OfficeFlow Agent
 
 The course builds an iterative customer support agent (versions v0–v6) for OfficeFlow Supply Co., with tools for database queries and knowledge base search.
 
+### Module 1: Observability
+
+- **Lesson 1 — Observability.** Why traditional debugging falls short for AI agents and how observability tools fill the gap.
+- **Lesson 2 — Setting up tracing with LangSmith.** Instrument your agent so every LLM call, tool invocation, and decision is captured in a trace.
+- **Lesson 3 — Analyzing your agent.** Use traces to run through PRD scenarios, spot failures, and iteratively debug your agent across multiple versions.
+
 ### Module 2: Evaluation
 
-- **Lesson 2** — Debug dataset
-- **Lesson 3** — Running evaluations with LangSmith
-- **Lesson 4** — Experiment iterations
-- **Lesson 5** — Pairwise evaluation
+- **Lesson 2 — Datasets.** Build collections of test inputs and reference outputs for repeatable evaluation.
+- **Lesson 3 — Running experiments.** Connect a target, a dataset, and evaluators to run your first experiment in LangSmith.
+- **Lesson 4 — Code-based eval.** Write deterministic evaluators that work like unit tests — checking tool usage, output shape, and keyword matching.
+- **Lesson 5 — LLM-as-judge.** Use an LLM to evaluate subjective criteria that are hard to test with code alone.
+- **Lesson 6 — Pairwise evaluation.** Compare two agent versions side by side to measure which performs better.
 
-### Module 3: Testing & Quality
+### Module 3: Scaling & Quality
 
-- **Lesson 2** — Generating test questions and running them through the agent
-- **Lesson 3** — Running experiments with evaluators
-- **Lesson 4** — Trace generation and upload
-
-### Module 4: Monitoring
-
-- **Lesson 2** — Trace generation and upload
+- **Lesson 2 — Online evaluations.** Automatically score production traces as they flow in, without running experiments manually.
+- **Lesson 3 — Automations.** Route traces based on eval scores — flag low-quality responses for review or add strong examples to your dataset.
+- **Lesson 4 — Scaling analysis with Insights Agent.** Detect usage patterns and failure modes across thousands of traces without manual review.
 
 ## 📖 Related Resources
 
