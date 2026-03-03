@@ -20,8 +20,7 @@ Both `python/` and `ts/` directories mirror each other with equivalent implement
 │   │
 │   ├── module-1/
 │   │   └── lesson-2/                  # Tracing with LangSmith
-│   │       ├── third_party_agent.py   # Weather agent with tool calling
-│   │       └── thread_agent.py        # Conversational agent with threads
+│   │       └── third_party_agent.py   # Weather agent with tool calling
 │   │
 │   ├── module-2/                      # Evaluation fundamentals
 │   │   ├── lesson-3/                  # Running experiments
@@ -57,8 +56,7 @@ Both `python/` and `ts/` directories mirror each other with equivalent implement
     │
     ├── module-1/
     │   └── lesson-2/                  # Tracing with LangSmith
-    │       ├── third_party_agent.ts   # Weather agent with tool calling
-    │       └── thread_agent.ts        # Conversational agent with threads
+    │       └── third_party_agent.ts   # Weather agent with tool calling
     │
     ├── module-2/                      # Evaluation fundamentals
     │   ├── lesson-3/                  # Running experiments
