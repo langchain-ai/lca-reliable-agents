@@ -85,7 +85,7 @@ You can provide your agent access to the LangSmith Documents. The instructions a
 
 The course builds an iterative customer support agent (versions v0–v5) for OfficeFlow Supply Co., with tools for database queries and knowledge base search.
 
-### Module 1: Observability
+### Module 1: Observation
 
 - **Lesson 1 — Observability.** Why traditional debugging falls short for AI agents and how observability tools fill the gap.
 - **Lesson 2 — Setting up tracing with LangSmith.** Instrument your agent so every LLM call, tool invocation, and decision is captured in a trace.
@@ -99,7 +99,7 @@ The course builds an iterative customer support agent (versions v0–v5) for Off
 - **Lesson 5 — LLM-as-judge.** Use an LLM to evaluate subjective criteria that are hard to test with code alone.
 - **Lesson 6 — Pairwise evaluation.** Compare two agent versions side by side to measure which performs better.
 
-### Module 3: Scaling & Quality
+### Module 3: Moving Towards Production
 
 - **Lesson 2 — Online evaluations.** Automatically score production traces as they flow in, without running experiments manually.
 - **Lesson 3 — Automations.** Route traces based on eval scores — flag low-quality responses for review or add strong examples to your dataset.
