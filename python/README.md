@@ -143,22 +143,23 @@ The course builds an iterative customer support agent (versions v0–v6) for Off
 ### Module 1: Observation
 
 - **Lesson 1 — Observability.** Why traditional debugging falls short for AI agents and how observability tools fill the gap.
-- **Lesson 2 — Setting up tracing with LangSmith.** Instrument your agent so every LLM call, tool invocation, and decision is captured in a trace.
-- **Lesson 3 — Analyzing your agent.** Use traces to run through PRD scenarios, spot failures, and iteratively debug your agent across multiple versions.
+- **Lesson 2 — Tracing with LangSmith.** Instrument your agent so every LLM call, tool invocation, and decision is captured in a trace.
+- **Lesson 3 — Analyzing your Agent.** Use traces to run through PRD scenarios, spot failures, and iteratively debug your agent across multiple versions.
 
 ### Module 2: Evaluation
 
-- **Lesson 2 — Datasets.** Build collections of test inputs and reference outputs for repeatable evaluation.
-- **Lesson 3 — Running experiments.** Connect a target, a dataset, and evaluators to run your first experiment in LangSmith.
-- **Lesson 4 — Code-based eval.** Write deterministic evaluators that work like unit tests — checking tool usage, output shape, and keyword matching.
-- **Lesson 5 — LLM-as-judge.** Use an LLM to evaluate subjective criteria that are hard to test with code alone.
-- **Lesson 6 — Pairwise evaluation.** Compare two agent versions side by side to measure which performs better.
+- **Lesson 1 — Evaluating Agents.** Why you need automated evals to monitor agent quality over time and detect regression as you develop.
+- **Lesson 2 — Creating Datasets.** Build collections of test inputs and reference outputs for repeatable evaluation.
+- **Lesson 3 — Running Experiments.** Connect a target, a dataset, and evaluators to run your first experiment in LangSmith.
+- **Lesson 4 — Eval 1 - Code-based Eval.** Write deterministic evaluators that work like unit tests — checking tool usage, output shape, and keyword matching.
+- **Lesson 5 — Eval 2 - LLM-as-Judge.** Use an LLM to evaluate subjective criteria that are hard to test with code alone.
+- **Lesson 6 — Eval 3 - Pairwise Evaluations.** Compare two agent versions side by side to measure which performs better.
 
 ### Module 3: Moving Towards Production
 
-- **Lesson 2 — Online evaluations.** Automatically score production traces as they flow in, without running experiments manually.
-- **Lesson 3 — Automations.** Route traces based on eval scores — flag low-quality responses for review or add strong examples to your dataset.
-- **Lesson 4 — Scaling analysis with Insights Agent.** Detect usage patterns and failure modes across thousands of traces without manual review.
+- **Lesson 1 — Moving Towards Production.** Transition from internal testing to real users, and learn the techniques needed to observe and evaluate at scale.
+- **Lesson 2 — Insights Agent.** Automatically analyze traces at scale to detect usage patterns and failure modes across hundreds of traces.
+- **Lesson 3 — Online Evals.** Automatically score every production trace as it comes in, giving you continuous signal on agent quality.
 
 ## 📖 Related Resources
 
