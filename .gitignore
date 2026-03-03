@@ -10,6 +10,10 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
 
 # Virtual environments
 venv/
@@ -32,6 +36,10 @@ Thumbs.db
 
 # Embeddings
 **/embeddings/embeddings.json
+
+# Downloaded traces
+python/traces/
+ts/traces/
 
 # Agent tools config directories
 .agent/

@@ -11,8 +11,8 @@ Welcome to LangChain Academy's **Building Reliable Agents** course!
 ### Prerequisites
 
 - The Chrome browser is recommended
-- Ensure you're using Node.js >=18 [More info](#nodejs-version-management)
-- [npm](https://www.npmjs.com/) (included with Node.js)
+- Node.js >= 18 ([download here](https://nodejs.org/)) [More info](#nodejs-version-management)
+- npm (included with Node.js)
 
 ### Installation
 
@@ -21,6 +21,11 @@ Download the course repository
 # Clone the repo (shallow — latest code only)
 git clone --depth 1 https://github.com/langchain-ai/lca-reliable-agents.git
 cd lca-reliable-agents/ts
+```
+
+Install dependencies
+```bash
+npm install
 ```
 
 Make a copy of example.env
@@ -45,14 +50,9 @@ LANGSMITH_PROJECT=lca-reliable-agents
 #LANGSMITH_ENDPOINT=https://eu.api.smith.langchain.com
 ```
 
-Create a [LangSmith](https://smith.langchain.com/) account and API Key.  
-Get and OpenAI API Key [here](https://openai.com/index/openai-api/).  
-Optional, an Anthropic API Key [here](https://console.anthropic.com)  
-
-Install dependencies
-```bash
-npm install
-```
+Create a [LangSmith](https://smith.langchain.com/) account and API Key.
+Get an OpenAI API Key [here](https://openai.com/index/openai-api/).
+Optional, an Anthropic API Key [here](https://console.anthropic.com)
 
 ### Setup Verification
 
@@ -186,7 +186,7 @@ Download and install Node.js from [nodejs.org](https://nodejs.org/). The LTS ver
 If you don't have an OpenAI API key, you can sign up [here](https://openai.com/index/openai-api/). The course primarily uses gpt-5-nano which is very inexpensive.
 You may also obtain additional API keys for [Anthropic](https://console.anthropic.com).
 
-This course has been created using particular models and model providers.  You can use other providers, but you will need to update the API keys in the .env file and make some necessary code changes.
+This course has been created using particular models and model providers.  You can use other providers, but you will need to update the API keys in the .env file and make some necessary code changes. LangChain supports many chat model providers [here](https://docs.langchain.com/oss/js/integrations/providers/all_providers).
 
 ### Getting Started with LangSmith
 
@@ -210,6 +210,3 @@ This course uses the [dotenv](https://www.npmjs.com/package/dotenv) module to re
 
 **Note:** If you have API keys already set in your system environment, they may conflict with the ones in your .env file. The `env_utils.ts` verification script will detect and warn you about such conflicts. By default, `dotenv.config()` does not override existing environment variables.
 
-### Development Environment
-
-This course uses TypeScript scripts. You can edit and run them in any editor, including VSCode, Cursor, or Windsurf.
