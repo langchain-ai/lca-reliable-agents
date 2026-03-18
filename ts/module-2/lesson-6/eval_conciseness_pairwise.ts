@@ -72,7 +72,7 @@ export async function concisenessEvaluator({
 }
 
 // When run directly as a script
-const isMainModule = process.argv[1]?.endsWith("eval_conciseness_pairwise");
+const isMainModule = process.argv[1]?.includes("eval_conciseness_pairwise");
 if (isMainModule) {
   await evaluate(["agent-v4-experiment", "agent-v5-experiment"], {
     evaluators: [concisenessEvaluator],
