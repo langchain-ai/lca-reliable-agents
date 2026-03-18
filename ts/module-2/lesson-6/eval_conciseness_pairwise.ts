@@ -1,3 +1,4 @@
+import "dotenv/config";
 import OpenAI from "openai";
 import { evaluate } from "langsmith/evaluation";
 import type { Run } from "langsmith/schemas";
