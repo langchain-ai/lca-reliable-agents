@@ -8,8 +8,11 @@ Usage:
     uv run python eval_conciseness_pairwise.py agent-v4-3e016f9c agent-v5-7d7ee287
 """
 
+from dotenv import load_dotenv
 from openai import OpenAI
 from langsmith import evaluate
+
+load_dotenv()
 
 client = OpenAI()
 
