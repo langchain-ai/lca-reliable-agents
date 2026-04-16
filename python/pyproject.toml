@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12, <=3.13"
 dependencies = [
     "anthropic",
-    "langsmith>=0.6.0",
+    "langsmith>=0.7.31",
     "langsmith-fetch>=0.3.1",
     "python-dotenv>=1.0.0",
     "numpy>=1.24.0",
