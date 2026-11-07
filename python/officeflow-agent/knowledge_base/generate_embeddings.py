@@ -1,4 +1,7 @@
-"""Pre-generate embeddings for the knowledge base to speed up agent startup."""
+"""Pre-generate embeddings for the knowledge base to speed up agent startup.
+
+Run from the knowledge_base directory:  python generate_embeddings.py
+"""
 import asyncio
 import json
 import os
@@ -6,9 +9,12 @@ from pathlib import Path
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 
+from kb_cache import docs_fingerprint, make_embedding_client, EMBEDDING_MODEL
+
 load_dotenv()
 
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# LangSmith gateway when LANGSMITH_API_KEY is set, otherwise OpenAI directly
+client = make_embedding_client(AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY")))
 
 DOCS_DIR = "./documents"
 EMBEDDINGS_DIR = "./embeddings"
@@ -19,6 +25,7 @@ async def generate_embeddings():
     docs_path = Path(DOCS_DIR)
     embeddings_path = Path(EMBEDDINGS_DIR)
 
+    docs_hash = docs_fingerprint(docs_path)
     docs = []
     for file_path in docs_path.glob("*.md"):
         if file_path.name == "CHUNKING_NOTES.md":
@@ -31,7 +38,7 @@ async def generate_embeddings():
     embeddings = []
     for filename, content in docs:
         response = await client.embeddings.create(
-            model="text-embedding-3-small",
+            model=EMBEDDING_MODEL,
             input=content
         )
         embeddings.append(response.data[0].embedding)
@@ -39,8 +46,11 @@ async def generate_embeddings():
 
     cache_data = {
         "docs": docs,
-        "embeddings": embeddings
+        "embeddings": embeddings,
+        # The agents compare this against the current documents to detect a stale cache
+        "docs_hash": docs_hash,
     }
+    embeddings_path.mkdir(parents=True, exist_ok=True)
     cache_path = embeddings_path / "embeddings.json"
     with open(cache_path, 'w') as f:
         json.dump(cache_data, f)

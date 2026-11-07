@@ -9,11 +9,16 @@ from dotenv import load_dotenv
 from openai import AsyncOpenAI
 from langsmith import traceable, uuid7
 from langsmith.wrappers import wrap_openai
+from knowledge_base.kb_cache import docs_fingerprint, make_embedding_client, EMBEDDING_MODEL
 
 load_dotenv()
 
 # Initialize clients
 client = wrap_openai(AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY")))
+embedding_client = make_embedding_client(client)  # LangSmith gateway when LANGSMITH_API_KEY is set
+
+# Refuse to repeat an identical tool call within one turn (the model gets a nudge to answer instead)
+DEDUPE_TOOL_CALLS = True
 
 # Configuration
 thread_id = str(uuid7())
@@ -93,6 +98,11 @@ You have access to two powerful tools to help customers:
 
 Choose the right tool based on what the customer is asking about. For questions about specific products, use the database. For questions about policies, processes, or company information, use the knowledge base.
 
+CONTACT & LOCATION RULES:
+- Never mention internal facility codes (like LOC-1234) to customers. Refer to locations by city and state/province, e.g. "our Schaumburg, IL distribution center".
+- Only offer to do things you can actually do with your tools. You cannot contact other teams, check on a customer's behalf, connect or transfer them, or loop anyone in. Never end a reply with an offer like "Would you like me to connect you with...". If you can't find something, say so plainly and give the customer the right department's email or phone number from the knowledge base so they can reach out themselves.
+- If a customer asks about a location that isn't in the knowledge base, say we don't have one listed there, then give the nearest locations and the main line.
+
 EXAMPLE INTERACTIONS:
 
 Customer: "Do you have copy paper?"
@@ -144,18 +154,23 @@ YOU DO NOT KNOW THE SCHEMA. ALWAYS discover it first:
 }
 
 def _embeddings_are_stale(kb_path: Path, cache_path: Path) -> bool:
-    """Check if any document has been modified after the embeddings were generated."""
+    """Check whether the cached embeddings were built from different document content.
+
+    Compares a content hash, not mtimes: git checkouts give every file the same mtime, so an
+    mtime check let an outdated cache through. Caches without a hash (old format) count as stale.
+    """
     if not cache_path.exists():
         return True
 
-    cache_mtime = cache_path.stat().st_mtime
+    try:
+        with open(cache_path, 'r') as f:
+            cached_hash = json.load(f).get("docs_hash")
+    except (OSError, json.JSONDecodeError):
+        return True
 
-    for file_path in kb_path.glob("*.md"):
-        if file_path.name == "CHUNKING_NOTES.md":
-            continue
-        if file_path.stat().st_mtime > cache_mtime:
-            print(f"  Stale: {file_path.name} was modified after embeddings were generated")
-            return True
+    if cached_hash != docs_fingerprint(kb_path):
+        print("  Stale: knowledge base documents differ from the cached embeddings")
+        return True
 
     return False
 
@@ -164,6 +179,7 @@ async def _generate_and_cache_embeddings(kb_path: Path, cache_path: Path) -> Non
     """Generate embeddings for all documents and save to cache."""
     global knowledge_base_docs, knowledge_base_embeddings
 
+    docs_hash = docs_fingerprint(kb_path)
     docs = []
     for file_path in kb_path.glob("*.md"):
         if file_path.name == "CHUNKING_NOTES.md":
@@ -181,8 +197,8 @@ async def _generate_and_cache_embeddings(kb_path: Path, cache_path: Path) -> Non
     print(f"Generating embeddings for {len(docs)} documents...")
     embeddings = []
     for filename, content in docs:
-        response = await client.embeddings.create(
-            model="text-embedding-3-small",
+        response = await embedding_client.embeddings.create(
+            model=EMBEDDING_MODEL,
             input=content
         )
         embeddings.append(response.data[0].embedding)
@@ -192,7 +208,7 @@ async def _generate_and_cache_embeddings(kb_path: Path, cache_path: Path) -> Non
 
     # Save to cache
     cache_path.parent.mkdir(parents=True, exist_ok=True)
-    cache_data = {"docs": docs, "embeddings": embeddings}
+    cache_data = {"docs": docs, "embeddings": embeddings, "docs_hash": docs_hash}
     with open(cache_path, 'w') as f:
         json.dump(cache_data, f)
     print(f"Embeddings cached to {cache_path}")
@@ -231,8 +247,8 @@ async def search_knowledge_base(query: str, top_k: int = 2) -> str:
         return "Error: Knowledge base not loaded"
 
     # Generate embedding for query
-    response = await client.embeddings.create(
-        model="text-embedding-3-small",
+    response = await embedding_client.embeddings.create(
+        model=EMBEDDING_MODEL,
         input=query
     )
     query_embedding = response.data[0].embedding
@@ -307,6 +323,8 @@ async def chat(question: str) -> str:
 
     response_message = response.choices[0].message
 
+    seen_tool_calls: set[tuple[str, str]] = set()
+
     # Handle tool calls if the model wants to use them
     while response_message.tool_calls:
         # Add assistant's tool call to messages
@@ -330,8 +348,14 @@ async def chat(question: str) -> str:
         for tool_call in response_message.tool_calls:
             function_args = json.loads(tool_call.function.arguments)
 
+            call_key = (tool_call.function.name, tool_call.function.arguments)
+
             # Handle different tool calls
-            if tool_call.function.name == "query_database":
+            if DEDUPE_TOOL_CALLS and call_key in seen_tool_calls:
+                result = ("You already ran this exact call and have its results above. Do not repeat it. "
+                          "Answer the customer from those results, or say you couldn't find it and give "
+                          "them the right department's contact.")
+            elif tool_call.function.name == "query_database":
                 result = query_database(
                     query=function_args.get("query"),
                     db_path=db_path
@@ -342,6 +366,8 @@ async def chat(question: str) -> str:
                 )
             else:
                 result = f"Error: Unknown tool {tool_call.function.name}"
+
+            seen_tool_calls.add(call_key)
 
             # Add tool result to messages
             messages.append({
