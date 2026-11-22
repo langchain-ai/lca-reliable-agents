@@ -8,13 +8,20 @@ Usage:
     uv run python eval_conciseness_pairwise.py agent-v4-3e016f9c agent-v5-7d7ee287
 """
 
+
 from dotenv import load_dotenv
 from openai import OpenAI
 from langsmith import evaluate
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from model_config import openai_chat_options
+
 load_dotenv()
 
-client = OpenAI()
+client = OpenAI(**openai_chat_options())
 
 CONCISENESS_PROMPT = """You are evaluating two responses to the same customer question.
 Determine which response is MORE CONCISE while still providing all crucial information.

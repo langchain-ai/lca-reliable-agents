@@ -3,10 +3,16 @@ from dotenv import load_dotenv
 from langsmith import traceable, uuid7
 from langsmith.wrappers import wrap_openai
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from model_config import openai_chat_options
+
 load_dotenv()
 
 # Initialize clients
-client = wrap_openai(OpenAI())
+client = wrap_openai(OpenAI(**openai_chat_options()))
 
 # Configuration
 THREAD_ID = str(uuid7())

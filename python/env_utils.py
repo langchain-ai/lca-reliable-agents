@@ -172,31 +172,10 @@ def summarize_value(key: str, value: str, example_value: str = None) -> str:
     return "****" + value[-4:] if len(value) > 4 else "****" + value
 
 def _parse_required_keys(example_file_path: str) -> dict:
-    """Parse example.env to identify required keys and their example values.
+    from model_config import required_api_keys
 
-    Returns:
-        dict mapping key names to their example/placeholder values
-    """
-    required_keys = {}
-    with open(example_file_path, 'r') as f:
-        is_required_section = False
-        for line in f:
-            stripped = line.strip()
-            if stripped.startswith('#'):
-                if 'required' in stripped.lower():
-                    is_required_section = True
-                else:
-                    is_required_section = False
-            elif '=' in stripped and not stripped.startswith('#'):
-                key = stripped.split('=')[0].strip()
-                value = stripped.split('=', 1)[1].strip()
-                if value.startswith("'") and value.endswith("'"):
-                    value = value[1:-1]
-                elif value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                if is_required_section:
-                    required_keys[key] = value
-    return required_keys
+    examples = dotenv_values(example_file_path)
+    return {key: examples.get(key, "") for key in required_api_keys()}
 
 
 def check_env_file_exists(env_file_path: str = ".env", example_file_path: str = "example.env"):
@@ -218,6 +197,8 @@ def check_env_file_exists(env_file_path: str = ".env", example_file_path: str = 
         print()
         return False
 
+    from model_config import valid_key
+
     required_keys = _parse_required_keys(example_file_path)
     found = {}
     missing = []
@@ -226,7 +207,7 @@ def check_env_file_exists(env_file_path: str = ".env", example_file_path: str = 
         sys_val = os.environ.get(key)
         if sys_val is not None:
             # Check if it's still a placeholder value
-            if "your_" in sys_val or "_here" in sys_val:
+            if not valid_key(sys_val):
                 missing.append(key)
             else:
                 found[key] = sys_val
@@ -410,7 +391,8 @@ def doublecheck_env(file_path: str):
         print("This is just a check and is not required.\n")
         return
 
-    # Parse the example file to identify required keys and their example values
+    from model_config import valid_key
+
     required_keys = _parse_required_keys(file_path)
     all_example_values = {}
     with open(file_path, 'r') as f:
@@ -432,7 +414,7 @@ def doublecheck_env(file_path: str):
     print("Environment Variables:")
     printed_keys = set()
 
-    for key in parsed.keys():
+    for key in dict.fromkeys([*parsed, *required_keys]):
         current = os.getenv(key)
         example_val = all_example_values.get(key)
 
@@ -440,10 +422,8 @@ def doublecheck_env(file_path: str):
             # Use the new summarize_value with key, value, and example_value
             print(f"{key}={summarize_value(key, current, example_val)}")
 
-            # Check if this required key still has the example/placeholder value
-            # Only flag values that look like actual placeholders (e.g. "your_xxx_here")
             if key in required_keys:
-                if current == example_val and example_val and ("your_" in example_val or "_here" in example_val):
+                if not valid_key(current):
                     issues.append(f"  ⚠️  {key} still has the example/placeholder value")
         else:
             print(f"{key}=<not set>")

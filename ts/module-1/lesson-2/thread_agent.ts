@@ -1,3 +1,4 @@
+import { openAIChatOptions } from "../../model_config.js";
 import OpenAI from "openai";
 import { wrapOpenAI } from "langsmith/wrappers";
 import { traceable } from "langsmith/traceable";
@@ -5,7 +6,7 @@ import { uuid7 } from "langsmith";
 import "dotenv/config";
 
 // Initialize clients
-const client = wrapOpenAI(new OpenAI());
+const client = wrapOpenAI(new OpenAI(openAIChatOptions()));
 
 // Configuration
 const THREAD_ID = uuid7();

@@ -1,9 +1,10 @@
+import { openAIChatOptions } from "../../model_config.js";
 import "dotenv/config";
 import OpenAI from "openai";
 import { evaluate } from "langsmith/evaluation";
 import type { Run } from "langsmith/schemas";
 
-const openai = new OpenAI();
+const openai = new OpenAI(openAIChatOptions());
 
 const CONCISENESS_PROMPT = `You are evaluating two responses to the same customer question.
 Determine which response is MORE CONCISE while still providing all crucial information.
