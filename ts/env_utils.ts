@@ -1,3 +1,4 @@
+import { requiredAPIKeys, validKey } from "./model_config.js";
 // env_utils.ts
 // this utility will check a students setup to verify it has
 // packages loaded, node installed and api keys available
@@ -90,34 +91,8 @@ function summarizeValue(
   return value.length > 4 ? "****" + value.slice(-4) : "****" + value;
 }
 
-function parseRequiredKeys(
-  exampleFilePath: string
-): Record<string, string> {
-  if (!fs.existsSync(exampleFilePath)) return {};
-
-  const content = fs.readFileSync(exampleFilePath, "utf-8");
-  const requiredKeys: Record<string, string> = {};
-  let isRequiredSection = false;
-
-  for (const line of content.split("\n")) {
-    const stripped = line.trim();
-    if (stripped.startsWith("#")) {
-      isRequiredSection = stripped.toLowerCase().includes("required");
-    } else if (stripped.includes("=") && !stripped.startsWith("#")) {
-      const key = stripped.split("=")[0].trim();
-      let value = stripped.split("=").slice(1).join("=").trim();
-      if (
-        (value.startsWith("'") && value.endsWith("'")) ||
-        (value.startsWith('"') && value.endsWith('"'))
-      ) {
-        value = value.slice(1, -1);
-      }
-      if (isRequiredSection) {
-        requiredKeys[key] = value;
-      }
-    }
-  }
-  return requiredKeys;
+function parseRequiredKeys(): Record<string, string> {
+  return Object.fromEntries(requiredAPIKeys().map((key) => [key, ""]));
 }
 
 function checkEnvFileExists(
@@ -135,14 +110,14 @@ function checkEnvFileExists(
     return false;
   }
 
-  const requiredKeys = parseRequiredKeys(exampleFilePath);
+  const requiredKeys = parseRequiredKeys();
   const found: Record<string, string> = {};
   const missing: string[] = [];
 
   for (const [key] of Object.entries(requiredKeys)) {
     const sysVal = process.env[key];
     if (sysVal !== undefined) {
-      if (sysVal.includes("your_") || sysVal.includes("_here")) {
+      if (!validKey(sysVal)) {
         missing.push(key);
       } else {
         found[key] = sysVal;
@@ -335,7 +310,7 @@ function doublecheckEnv(filePath: string): void {
     return;
   }
 
-  const requiredKeys = parseRequiredKeys(filePath);
+  const requiredKeys = parseRequiredKeys();
 
   // Parse all example values
   const allExampleValues: Record<string, string> = {};
@@ -360,19 +335,17 @@ function doublecheckEnv(filePath: string): void {
 
   console.log("Environment Variables:");
 
-  for (const key of Object.keys(allExampleValues)) {
+  for (const key of new Set([
+    ...Object.keys(allExampleValues),
+    ...Object.keys(requiredKeys),
+  ])) {
     const current = process.env[key];
     const exampleVal = allExampleValues[key];
 
     if (current !== undefined) {
       console.log(`${key}=${summarizeValue(key, current, exampleVal)}`);
 
-      if (
-        key in requiredKeys &&
-        current === exampleVal &&
-        exampleVal &&
-        (exampleVal.includes("your_") || exampleVal.includes("_here"))
-      ) {
+      if (key in requiredKeys && !validKey(current)) {
         issues.push(
           `  \u26a0\ufe0f  ${key} still has the example/placeholder value`
         );

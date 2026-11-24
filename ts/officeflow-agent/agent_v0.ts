@@ -1,3 +1,4 @@
+import { openAIChatOptions, embeddingClient } from "../model_config.js";
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
@@ -13,7 +14,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 // Initialize OpenAI client
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const client = new OpenAI(openAIChatOptions());
 
 // Configuration
 const threadId = "default";
@@ -193,7 +194,7 @@ async function loadKnowledgeBase(
   console.log(`Generating embeddings for ${chunks.length} chunks...`);
   const embeddings: number[][] = [];
   for (const [, content] of chunks) {
-    const response = await client.embeddings.create({
+    const response = await embeddingClient(false).embeddings.create({
       model: "text-embedding-3-small",
       input: content,
     });
@@ -213,7 +214,7 @@ async function searchKnowledgeBase(
   }
 
   // Generate embedding for query
-  const response = await client.embeddings.create({
+  const response = await embeddingClient(false).embeddings.create({
     model: "text-embedding-3-small",
     input: query,
   });

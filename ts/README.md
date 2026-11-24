@@ -36,27 +36,49 @@ cp example.env .env
 
 Edit the .env file to include the keys below. [More info](#model-providers)
 ```bash
-# Required
+# Direct OpenAI chat and knowledge-base embeddings
 OPENAI_API_KEY='your_openai_api_key_here'
 
-# Optional, used by the question generator
-ANTHROPIC_API_KEY='your_anthropic_api_key_here'
+# Optional chat routing through LangSmith Gateway
+LANGSMITH_GATEWAY=false
+# LANGSMITH_GATEWAY_API_KEY='your_gateway_api_key_here'
 
-# Required for evaluation and tracing
+# LangSmith tracing, experiments, feedback, and trace uploads
 LANGSMITH_API_KEY='your_langsmith_api_key_here'
 LANGSMITH_TRACING=true
 LANGSMITH_PROJECT=lca-reliable-agents
-# Uncomment the following if you are on the EU instance:
-#LANGSMITH_ENDPOINT=https://eu.api.smith.langchain.com
+# LANGSMITH_ENDPOINT=https://eu.api.smith.langchain.com
 ```
 
 Create a [LangSmith](https://smith.langchain.com/) account and API Key.
-Get an OpenAI API Key [here](https://openai.com/index/openai-api/).
-Optional, an Anthropic API Key [here](https://console.anthropic.com)
+For the default direct-provider setup, get an OpenAI API key [here](https://openai.com/index/openai-api/).
+
+### Optional: LangSmith Gateway for chat
+
+The course uses the raw OpenAI SDK, which does not read `LANGSMITH_GATEWAY` itself. Our `model_config.ts` helper routes all course chat calls, including the local pairwise judge, through the OpenAI-compatible provider path when you opt in. The installed SDK already supports explicit API keys and base URLs; no package upgrade is needed.
+
+First ask your workspace administrator to [configure Gateway and the OpenAI provider secret](https://docs.langchain.com/langsmith/llm-gateway-admin-setup), and confirm access to the course's GPT-5 models. Then edit `.env`:
+
+```dotenv
+LANGSMITH_GATEWAY=true
+LANGSMITH_API_KEY=your_langsmith_api_key_here
+```
+
+Replace the placeholder with your real key. To use a separate inference credential, set `LANGSMITH_GATEWAY_API_KEY`; a nonempty override takes precedence over `LANGSMITH_API_KEY`. An empty override falls back to `LANGSMITH_API_KEY`. Missing, blank, and template keys are rejected for the selected chat route.
+
+- `true`, `1`, or `yes` (case-insensitive) selects `https://gateway.smith.langchain.com/openai/v1`
+- `false`, `0`, `no`, unset, or empty keeps direct OpenAI chat as the default
+- A custom root URL, such as `https://eu.gateway.smith.langchain.com`, gets `/openai/v1` appended; do not include that provider path yourself
+
+You can export the same values in your shell instead of creating `.env`. Existing shell values take precedence; restart the script after changes. Do not replace `OPENAI_API_KEY` with a LangSmith key or globally redirect `OPENAI_BASE_URL` to Gateway.
+
+**Course limits:** OfficeFlow knowledge-base searches and embedding generation still call OpenAI directly and require `OPENAI_API_KEY`, even in Gateway mode. The basic Module 1 chat examples and local pairwise judge do not need a local OpenAI key in Gateway mode. Tools remain local SQLite and file operations; Gateway only changes chat transport. The course keeps its model names and does not automatically switch providers.
+
+Tracing is independent: `LANGSMITH_TRACING=false` disables application tracing, not Gateway routing or Gateway-side tracing. A separate Gateway key does not authenticate LangSmith experiments, feedback, trace uploads, or application tracing; those need `LANGSMITH_API_KEY` and the correct `LANGSMITH_ENDPOINT`. Configure credentials for any evaluator running in the LangSmith UI on the server; a local `.env` does not configure hosted evaluators.
 
 ### Setup Verification
 
-After completing the Setup section, we recommend you run this command to verify your environment:
+The checker validates the selected chat credential and, when enabled, tracing. Embeddings and LangSmith experiments/uploads have the separate requirements above. After setup, run:
 
 ```bash
 npx tsx env_utils.ts
@@ -107,6 +129,29 @@ The course builds an iterative customer support agent (versions v0–v5) for Off
 - **Lesson 3 — Online Evals.** Automatically score every production trace as it comes in, giving you continuous signal on agent quality.
 
 ## 📖 Related Resources
+
+### Optional: LangSmith Gateway for chat
+
+The course uses the raw OpenAI SDK, which does not read `LANGSMITH_GATEWAY` itself. Our `model_config.ts` helper routes all course chat calls, including the local pairwise judge, through the OpenAI-compatible provider path when you opt in. The installed SDK already supports explicit API keys and base URLs; no package upgrade is needed.
+
+First ask your workspace administrator to [configure Gateway and the OpenAI provider secret](https://docs.langchain.com/langsmith/llm-gateway-admin-setup), and confirm access to the course's GPT-5 models. Then edit `.env`:
+
+```dotenv
+LANGSMITH_GATEWAY=true
+LANGSMITH_API_KEY=your_langsmith_api_key_here
+```
+
+Replace the placeholder with your real key. To use a separate inference credential, set `LANGSMITH_GATEWAY_API_KEY`; a nonempty override takes precedence over `LANGSMITH_API_KEY`. An empty override falls back to `LANGSMITH_API_KEY`. Missing, blank, and template keys are rejected for the selected chat route.
+
+- `true`, `1`, or `yes` (case-insensitive) selects `https://gateway.smith.langchain.com/openai/v1`
+- `false`, `0`, `no`, unset, or empty keeps direct OpenAI chat as the default
+- A custom root URL, such as `https://eu.gateway.smith.langchain.com`, gets `/openai/v1` appended; do not include that provider path yourself
+
+You can export the same values in your shell instead of creating `.env`. Existing shell values take precedence; restart the script after changes. Do not replace `OPENAI_API_KEY` with a LangSmith key or globally redirect `OPENAI_BASE_URL` to Gateway.
+
+**Course limits:** OfficeFlow knowledge-base searches and embedding generation still call OpenAI directly and require `OPENAI_API_KEY`, even in Gateway mode. The basic Module 1 chat examples and local pairwise judge do not need a local OpenAI key in Gateway mode. Tools remain local SQLite and file operations; Gateway only changes chat transport. The course keeps its model names and does not automatically switch providers.
+
+Tracing is independent: `LANGSMITH_TRACING=false` disables application tracing, not Gateway routing or Gateway-side tracing. A separate Gateway key does not authenticate LangSmith experiments, feedback, trace uploads, or application tracing; those need `LANGSMITH_API_KEY` and the correct `LANGSMITH_ENDPOINT`. Configure credentials for any evaluator running in the LangSmith UI on the server; a local `.env` does not configure hosted evaluators.
 
 ### Setup Verification Issues
 **What the verification checks:**
@@ -184,8 +229,7 @@ Download and install Node.js from [nodejs.org](https://nodejs.org/). The LTS ver
 
 ### Model Providers
 
-If you don't have an OpenAI API key, you can sign up [here](https://openai.com/index/openai-api/). The course primarily uses gpt-5-nano which is very inexpensive.
-You may also obtain additional API keys for [Anthropic](https://console.anthropic.com).
+For direct chat or embeddings, if you don't have an OpenAI API key, you can sign up [here](https://openai.com/index/openai-api/). The course primarily uses gpt-5-nano which is very inexpensive.
 
 This course has been created using particular models and model providers.  You can use other providers, but you will need to update the API keys in the .env file and make some necessary code changes. LangChain supports many chat model providers [here](https://docs.langchain.com/oss/js/integrations/providers/all_providers).
 

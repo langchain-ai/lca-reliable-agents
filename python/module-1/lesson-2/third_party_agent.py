@@ -3,9 +3,15 @@ from langsmith.wrappers import wrap_openai
 from langsmith import traceable
 from dotenv import load_dotenv
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from model_config import openai_chat_options
+
 load_dotenv()
 
-client = wrap_openai(OpenAI())
+client = wrap_openai(OpenAI(**openai_chat_options()))
 
 @traceable(run_type="tool")
 def weather_retriever():

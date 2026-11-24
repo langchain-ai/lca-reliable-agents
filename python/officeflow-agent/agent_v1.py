@@ -1,8 +1,6 @@
 import asyncio
 import sqlite3
 import json
-import os
-from pathlib import Path
 from typing import List, Tuple
 import numpy as np
 from dotenv import load_dotenv
@@ -10,10 +8,16 @@ from openai import AsyncOpenAI
 from langsmith import traceable, uuid7
 from langsmith.wrappers import wrap_openai
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from model_config import openai_chat_options, embedding_client
+
 load_dotenv()
 
 # Initialize clients
-client = wrap_openai(AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY")))
+client = wrap_openai(AsyncOpenAI(**openai_chat_options()))
 
 # Configuration
 thread_id = str(uuid7())
@@ -162,7 +166,7 @@ async def load_knowledge_base(kb_dir: str = "./knowledge_base") -> None:
     print(f"Generating embeddings for {len(chunks)} chunks...")
     embeddings = []
     for chunk_name, content in chunks:
-        response = await client.embeddings.create(
+        response = await embedding_client().embeddings.create(
             model="text-embedding-3-small",
             input=content
         )
@@ -178,7 +182,7 @@ async def search_knowledge_base(query: str, top_k: int = 2) -> str:
         return "Error: Knowledge base not loaded"
 
     # Generate embedding for query
-    response = await client.embeddings.create(
+    response = await embedding_client().embeddings.create(
         model="text-embedding-3-small",
         input=query
     )

@@ -81,3 +81,7 @@ Both `python/` and `ts/` directories mirror each other with equivalent implement
     ├── package.json
     └── example.env
 ```
+
+## Model access
+
+Direct OpenAI access remains the default. For optional LangSmith Gateway chat setup and the direct OpenAI embedding requirements, see the [Python setup](python/README.md#optional-langsmith-gateway-for-chat) or [TypeScript setup](ts/README.md#optional-langsmith-gateway-for-chat).

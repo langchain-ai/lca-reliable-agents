@@ -1,9 +1,10 @@
+import { openAIChatOptions } from "../../model_config.js";
 import OpenAI from "openai";
 import { wrapOpenAI } from "langsmith/wrappers";
 import { traceable } from "langsmith/traceable";
 import "dotenv/config";
 
-const client = wrapOpenAI(new OpenAI());
+const client = wrapOpenAI(new OpenAI(openAIChatOptions()));
 
 const weatherRetriever = traceable(
   async () => {
